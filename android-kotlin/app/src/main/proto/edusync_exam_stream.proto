@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package waqar.erp.exam.v1;
+
+option java_multiple_files = true;
+option java_package = "com.waqarinstitute.erp.proto";
+option java_outer_classname = "ExamStreamProto";
+
+// Bi-Directional gRPC Streaming Service for Live Proctored Examinations (Cloud Run)
+service LiveExamStreamingService {
+  rpc StreamLiveExam (stream ClientExamFrame) returns (stream ServerExamDirective);
+}
+
+message ClientExamFrame {
+  string session_id = 1;
+  string student_id = 2;
+  string exam_code = 3;
+  int64 client_monotonic_ms = 4;
+  bytes device_attestation_signature = 5;
+
+  oneof payload {
+    McqAnswerDelta answer_delta = 10;
+    ProctoringTelemetryFrame telemetry = 11;
+    HeartbeatPing ping = 12;
+  }
+}
+
+message McqAnswerDelta {
+  int32 question_index = 1;
+  string question_id = 2;
+  string selected_option = 3; // "A", "B", "C", "D"
+  double privatized_dwell_ms = 4;
+}
+
+message ProctoringTelemetryFrame {
+  double privatized_touch_pressure = 1;
+  double privatized_keystroke_latency_ms = 2;
+  int32 focus_loss_strikes = 3;
+  bool memory_integrity_ok = 4;
+}
+
+message HeartbeatPing {
+  int64 sequence_number = 1;
+}
+
+message ServerExamDirective {
+  string directive_id = 1;
+  int64 server_timestamp_ms = 2;
+  int64 remaining_seconds = 3;
+  bool ack_verified = 4;
+
+  enum DirectiveCommand {
+    CONTINUE = 0;
+    FORCE_SUBMIT_TIME_EXPIRED = 1;
+    TERMINATE_VIOLATION_LIMIT = 2;
+    ROTATE_SESSION_KEY = 3;
+  }
+
+  DirectiveCommand command = 5;
+  string message = 6;
+}

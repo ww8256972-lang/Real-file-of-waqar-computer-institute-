@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- Block cleartext HTTP traffic globally across the entire application -->
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+
+    <!--
+      Certificate Pinning for Firebase Cloud Functions (asia-southeast1-adroit-graph-h2w8r.cloudfunctions.net)
+      and Google Trust Services (GTS Root R1 & GTS Root R2 SPKI SHA-256 Pins).
+      Rotation Policy: Always maintain at least one backup Root/Intermediate CA SPKI pin before rotating leaf certs.
+    -->
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">asia-southeast1-adroit-graph-h2w8r.cloudfunctions.net</domain>
+        <domain includeSubdomains="true">firebaseio.com</domain>
+        <domain includeSubdomains="true">googleapis.com</domain>
+        <pin-set expiration="2028-12-31">
+            <!-- Google Trust Services GTS Root R1 SPKI SHA-256 Pin -->
+            <pin digest="SHA-256">hxqRlPTu1bMS/0DITB1SSu0vd4u/8l8TjPgfaAp63Gc=</pin>
+            <!-- Google Trust Services GTS Root R2 Backup SPKI SHA-256 Pin -->
+            <pin digest="SHA-256">Vfd95BwDeSQo+NUYxVEEIlvkOlWY2SalKK1lPhzOx78=</pin>
+            <!-- DigiCert Global Root G2 Backup SPKI SHA-256 Pin -->
+            <pin digest="SHA-256">i7WTqTvh0OioIruIfFR4kMPnBqrS2rdiVPl/s2uC/CY=</pin>
+        </pin-set>
+    </domain-config>
+</network-security-config>

@@ -1,0 +1,33 @@
+# Gradle & Android Build Outputs
+.gradle/
+**/build/
+local.properties
+*.iml
+.idea/
+.cxx/
+captures/
+.externalNativeBuild/
+
+# Keystores & Signing Secrets (NEVER COMMIT)
+*.jks
+*.keystore
+release-keystore.jks
+
+# Environment & Secrets
+.env
+.env.*
+!.env.example
+functions/.env
+functions/.env.*
+!functions/.env.example
+service-account*.json
+
+# Node / Functions / Tooling
+node_modules/
+functions/node_modules/
+functions/lib/
+cloud-run-exam-stream/node_modules/
+cloud-run-exam-stream/dist/
+dist/
+dist-apks/
+*.log

@@ -1,0 +1,116 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    --font-display: 'Outfit', sans-serif;
+    --font-sans: 'Plus Jakarta Sans', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background: linear-gradient(180deg, #00B4D8 0%, #48CAE4 40%, #90E0EF 75%, #CAF0F8 100%);
+    min-height: 100vh;
+    color: #03045E;
+  }
+
+  h1, h2, h3, h4, .font-display {
+    font-family: var(--font-display);
+  }
+
+  .font-mono, .tabular-nums {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Light Waterfall & Water Ripple Theme Utilities */
+.waterfall-gradient {
+  background: linear-gradient(180deg, #00B4D8 0%, #48CAE4 35%, #90E0EF 70%, #CAF0F8 100%);
+}
+
+.waterfall-card {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 10px 30px -5px rgba(0, 180, 216, 0.25);
+}
+
+.waterfall-glass {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+/* Waterfall cascading stream animation */
+@keyframes waterfallFlow {
+  0% { transform: translateY(-100%); opacity: 0; }
+  30% { opacity: 0.85; }
+  100% { transform: translateY(120vh); opacity: 0; }
+}
+
+.animate-waterfall-drop {
+  animation: waterfallFlow 4.2s linear infinite;
+}
+
+/* Full-screen Swimming Koi Fish animations */
+@keyframes fishSwimScreenRight {
+  0% { transform: translate(-15vw, 0px) scale(0.95) rotate(-2deg); }
+  25% { transform: translate(20vw, -28px) scale(1.05) rotate(3deg); }
+  50% { transform: translate(55vw, 18px) scale(1) rotate(-3deg); }
+  75% { transform: translate(85vw, -22px) scale(1.05) rotate(2deg); }
+  100% { transform: translate(115vw, 10px) scale(0.95) rotate(0deg); }
+}
+
+@keyframes fishSwimScreenLeft {
+  0% { transform: translate(115vw, 0px) scaleX(-1) scale(0.95) rotate(-2deg); }
+  25% { transform: translate(80vw, 24px) scaleX(-1) scale(1.05) rotate(3deg); }
+  50% { transform: translate(45vw, -20px) scaleX(-1) scale(1) rotate(-2deg); }
+  75% { transform: translate(15vw, 16px) scaleX(-1) scale(1.04) rotate(2deg); }
+  100% { transform: translate(-15vw, -12px) scaleX(-1) scale(0.95) rotate(0deg); }
+}
+
+@keyframes fishSwimContainerRight {
+  0% { transform: translate(-80px, 0px) scale(0.9); }
+  50% { transform: translate(170px, -20px) scale(1.05); }
+  100% { transform: translate(410px, 14px) scale(0.95); }
+}
+
+@keyframes fishSwimContainerLeft {
+  0% { transform: translate(410px, 0px) scaleX(-1) scale(0.95); }
+  50% { transform: translate(180px, 18px) scaleX(-1) scale(1.05); }
+  100% { transform: translate(-80px, -12px) scaleX(-1) scale(0.9); }
+}
+
+.animate-swim-screen-right {
+  animation: fishSwimScreenRight 18s linear infinite;
+}
+
+.animate-swim-screen-left {
+  animation: fishSwimScreenLeft 22s linear infinite;
+}
+
+.animate-swim-right {
+  animation: fishSwimContainerRight 11s ease-in-out infinite;
+}
+
+.animate-swim-left {
+  animation: fishSwimContainerLeft 14s ease-in-out infinite;
+}
+
+/* Smooth custom scrollbar with light waterfall tint */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 180, 216, 0.4);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 180, 216, 0.75);
+}

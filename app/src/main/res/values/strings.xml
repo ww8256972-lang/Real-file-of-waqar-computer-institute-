@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WAQAR INSTITUTE</string>
+    <string name="welcome_title">Welcome to WAQAR COMPUTER INSTITUTE</string>
+    <string name="welcome_subtitle">Pure Native Jetpack Compose ERP • Proctored Exams • Live Classroom • AI Doubt Tutor</string>
+    <string name="proceed_to_portals">Proceed to Role Portals</string>
+    <string name="select_role_title">Select Your Role Portal</string>
+    <string name="login_username_label">Username / Enrollment ID</string>
+    <string name="login_password_label">Enter your password</string>
+    <string name="forgot_password_email">Send Password Reset Email</string>
+    <string name="native_security_error">Critical Security Module Failed to Load: Exams and Attendance are blocked on this device.</string>
+    <string name="camera_permission_rationale">Camera access is required to scan the instructor\'s rotating QR code for verified classroom attendance.</string>
+    <string name="location_permission_rationale">High-accuracy GPS location is required to verify you are inside the institute campus geofence during attendance.</string>
+</resources>

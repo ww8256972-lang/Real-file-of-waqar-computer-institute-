@@ -1,0 +1,2555 @@
+### WAQAR INSTITUTE – 600+ App Functions List
+
+English • Point-wise • Module-wise • Navigation Mapping
+
+This is a complete functional blueprint for the WAQAR INSTITUTE Android Application.
+
+Important System Requirements
+
+* No Fake Data.
+
+* No Dummy Data.
+
+* No Demo Accounts.
+
+* No Fake Login Credentials.
+
+* No Placeholder Student Records.
+
+* No Fake Notifications.
+
+* No Mock API Responses.
+
+* No Simulated Firebase Sync.
+
+* No Fake Examination Results.
+
+* No Artificial Attendance Records.
+
+* No Payment Gateway.
+
+* No Installment System.
+
+* Multi-Branch Management Included.
+
+* Real Firebase Authentication and Database Integration.
+
+* Real Student, Teacher, Admin, and Parent Accounts.
+
+* All records must belong to real users or authorized institute staff.
+
+* Empty screens must display proper empty states instead of sample records.
+
+* All database operations must use actual backend responses.
+
+* All navigation items must open their actual functional screens.
+
+### 1\. Main Navigation Bar – Student App
+
+Bottom Navigation Bar – 5 Items
+
+Home
+
+Courses
+
+Exams
+
+Attendance
+
+Profile
+
+### Student Bottom Navigation Functions
+
+* Home Dashboard
+
+* My Courses
+
+* Scheduled Exams
+
+* My Attendance
+
+* Student Profile
+
+Additional Student Navigation:
+
+* Notifications – Top App Bar
+
+* Messages – Top App Bar
+
+* AI Tutor – Floating Action Button or Dashboard Shortcut
+
+* Study Materials – Courses Section
+
+* Results – Exams Section
+
+* Certificates – Profile Menu
+
+* Fee Records – Profile Menu
+
+* ID Card – Profile Menu
+
+* Settings – Profile Menu
+
+* Help & Support – Profile Menu
+
+### 2\. Admin Navigation – Main Sidebar
+
+Admin Sidebar – 15 Main Sections
+
+* Dashboard
+
+* Students
+
+* Admissions
+
+* Teachers
+
+* Courses
+
+* Batches
+
+* Attendance
+
+* Examinations
+
+* Results
+
+* Fees
+
+* Certificates
+
+* Branches
+
+* Reports & Analytics
+
+* Notifications
+
+* Settings
+
+### Admin Top App Bar
+
+* Global Search
+
+* Notifications
+
+* Messages
+
+* Quick Actions
+
+* Branch Selector
+
+* Admin Profile
+
+* Help & Support
+
+* Logout
+
+### 3\. Admin Dashboard Functions
+
+* Total Students Overview
+
+* Active Students Overview
+
+* New Admissions Overview
+
+* Total Teachers Overview
+
+* Active Courses Overview
+
+* Running Batches Overview
+
+* Today's Attendance Overview
+
+* Today's Examination Overview
+
+* Pending Fee Overview
+
+* Fee Collection Overview
+
+* Branch Performance Overview
+
+* Student Growth Analytics
+
+* Admission Trend Chart
+
+* Attendance Trend Chart
+
+* Course Enrollment Chart
+
+* Branch Comparison Chart
+
+* Quick Admission Action
+
+* Quick Student Registration
+
+* Quick Teacher Registration
+
+* Quick Course Creation
+
+* Quick Batch Creation
+
+* Quick Attendance Entry
+
+* Quick Examination Creation
+
+* Quick Fee Receipt Entry
+
+* Recent Student Activity
+
+* Recent Admission Activity
+
+* Recent Examination Activity
+
+* Recent Fee Activity
+
+* Recent Notifications
+
+* System Health Overview
+
+* Database Sync Status
+
+* Active User Sessions
+
+* Branch-wise Dashboard Filtering
+
+* Date Range Dashboard Filtering
+
+* Export Dashboard Reports
+
+* Dashboard Widget Customization
+
+* Role-based Dashboard Layout
+
+### 4\. Student Management – 40 Functions
+
+* Create Student Profile
+
+* Edit Student Profile
+
+* View Student Profile
+
+* Search Student by Name
+
+* Search Student by Student ID
+
+* Search Student by Username
+
+* Search Student by Mobile Number
+
+* Search Student by Branch
+
+* Search Student by Course
+
+* Search Student by Batch
+
+* Generate Unique Student ID
+
+* Generate Student Username
+
+* Assign Student Login Credentials
+
+* Reset Student Password
+
+* Activate Student Account
+
+* Deactivate Student Account
+
+* Student Account Status
+
+* Upload Student Photograph
+
+* Upload Student Documents
+
+* Student Personal Details
+
+* Student Guardian Details
+
+* Student Address Details
+
+* Student Education Details
+
+* Student Admission Details
+
+* Student Course History
+
+* Student Batch History
+
+* Student Attendance History
+
+* Student Examination History
+
+* Student Result History
+
+* Student Certificate History
+
+* Student Fee History
+
+* Student ID Card Generation
+
+* Student Profile PDF Export
+
+* Student Data Import
+
+* Student Data Export
+
+* Student Record Archive
+
+* Student Record Restore
+
+* Student Record Audit History
+
+* Student Profile Access Permissions
+
+* Student Account Security
+
+### 5\. Admission Management – 30 Functions
+
+* New Admission Registration
+
+* Admission Enquiry Registration
+
+* Admission Enquiry List
+
+* Admission Enquiry Search
+
+* Enquiry Follow-up Scheduling
+
+* Admission Follow-up History
+
+* Admission Status Tracking
+
+* Pending Admission List
+
+* Confirm Admission
+
+* Admission Cancellation
+
+* Admission Form Generation
+
+* Admission Form PDF Export
+
+* Admission Document Upload
+
+* Admission Document Verification
+
+* Admission Approval Workflow
+
+* Admission Rejection Workflow
+
+* Admission Date Recording
+
+* Admission Number Generation
+
+* Course Selection During Admission
+
+* Batch Selection During Admission
+
+* Branch Selection During Admission
+
+* Admission Fee Record Creation
+
+* Admission Receipt Generation
+
+* Admission Confirmation Notification
+
+* Admission Welcome Notification
+
+* Admission Register
+
+* Daily Admission Report
+
+* Monthly Admission Report
+
+* Branch-wise Admission Report
+
+* Admission Data Export
+
+### 6\. Teacher Management – 35 Functions
+
+* Create Teacher Profile
+
+* Edit Teacher Profile
+
+* View Teacher Profile
+
+* Generate Teacher ID
+
+* Assign Teacher Username
+
+* Assign Teacher Login Credentials
+
+* Reset Teacher Password
+
+* Teacher Account Activation
+
+* Teacher Account Deactivation
+
+* Teacher Photograph Upload
+
+* Teacher Document Upload
+
+* Teacher Qualification Records
+
+* Teacher Experience Records
+
+* Teacher Contact Details
+
+* Teacher Address Details
+
+* Teacher Joining Date
+
+* Teacher Employment Status
+
+* Assign Teacher to Branch
+
+* Assign Teacher to Course
+
+* Assign Teacher to Batch
+
+* Assign Teacher as Batch Administrator
+
+* Teacher Timetable
+
+* Teacher Attendance
+
+* Teacher Leave Records
+
+* Teacher Assigned Students
+
+* Teacher Examination Permissions
+
+* Teacher Result Permissions
+
+* Teacher Study Material Upload
+
+* Teacher Notice Publishing
+
+* Teacher Performance Reports
+
+* Teacher Workload Reports
+
+* Teacher Activity History
+
+* Teacher Profile PDF Export
+
+* Teacher Data Export
+
+* Teacher Access Permissions
+
+### 7\. Course Management – 35 Functions
+
+* Create Course
+
+* Edit Course
+
+* View Course Details
+
+* Delete Course with Confirmation
+
+* Course Name
+
+* Course Code
+
+* Course Description
+
+* Course Duration
+
+* Course Syllabus
+
+* Course Learning Objectives
+
+* Course Modules
+
+* Course Chapters
+
+* Course Topics
+
+* Course Lessons
+
+* Course Prerequisites
+
+* Course Eligibility
+
+* Course Thumbnail Upload
+
+* Course Banner Upload
+
+* Course Material Assignment
+
+* Course Teacher Assignment
+
+* Course Branch Assignment
+
+* Course Batch Assignment
+
+* Course Fee Configuration
+
+* Course Status Management
+
+* Course Enrollment Management
+
+* Course Completion Tracking
+
+* Course Progress Tracking
+
+* Course Certificate Eligibility
+
+* Course Student List
+
+* Course Performance Analytics
+
+* Course Popularity Reports
+
+* Course Data Export
+
+* Course Search
+
+* Course Category Management
+
+* Course Archive Management
+
+### 8\. Batch Management – 30 Functions
+
+* Create Batch
+
+* Edit Batch
+
+* View Batch Details
+
+* Generate Batch Code
+
+* Assign Batch Course
+
+* Assign Batch Teacher
+
+* Assign Batch Branch
+
+* Assign Batch Students
+
+* Remove Student from Batch
+
+* Batch Start Date
+
+* Batch End Date
+
+* Batch Schedule Configuration
+
+* Batch Class Timing
+
+* Batch Classroom Assignment
+
+* Batch Capacity Configuration
+
+* Batch Enrollment Status
+
+* Batch Active Status
+
+* Batch Student List
+
+* Batch Attendance Register
+
+* Batch Examination Schedule
+
+* Batch Study Material
+
+* Batch Notices
+
+* Batch Timetable
+
+* Batch Progress Reports
+
+* Batch Completion Records
+
+* Batch Transfer
+
+* Batch Student Search
+
+* Batch Teacher Search
+
+* Batch-wise Reports
+
+* Batch Archive
+
+### 9\. Attendance Management – 35 Functions
+
+* Daily Student Attendance
+
+* Manual Attendance Entry
+
+* QR Code Attendance
+
+* Student QR Code Generation
+
+* Teacher QR Attendance Scanner
+
+* Batch-wise Attendance
+
+* Course-wise Attendance
+
+* Branch-wise Attendance
+
+* Date-wise Attendance
+
+* Present Status
+
+* Absent Status
+
+* Late Status
+
+* Leave Status
+
+* Attendance Correction Request
+
+* Attendance Correction Approval
+
+* Attendance Editing Permissions
+
+* Attendance Locking
+
+* Attendance Register
+
+* Student Attendance Percentage
+
+* Monthly Attendance Summary
+
+* Daily Attendance Report
+
+* Weekly Attendance Report
+
+* Monthly Attendance Report
+
+* Student Attendance History
+
+* Batch Attendance History
+
+* Teacher Attendance Entry
+
+* Teacher Attendance Reports
+
+* Attendance Notifications
+
+* Attendance Shortage Alerts
+
+* Attendance PDF Export
+
+* Attendance Excel Export
+
+* Attendance Audit History
+
+* Attendance Data Synchronization
+
+* Offline Attendance Queue
+
+* Attendance Conflict Resolution
+
+### 10\. Examination Management – 45 Functions
+
+* Create Examination
+
+* Edit Examination
+
+* Delete Examination with Confirmation
+
+* Examination Name
+
+* Examination Description
+
+* Examination Course Assignment
+
+* Examination Batch Assignment
+
+* Examination Branch Assignment
+
+* Examination Teacher Assignment
+
+* Examination Date Configuration
+
+* Examination Start Time
+
+* Examination End Time
+
+* Examination Duration
+
+* Examination Availability Window
+
+* Examination Activation
+
+* Examination Deactivation
+
+* Examination Instructions
+
+* Examination Question Bank
+
+* Create MCQ Questions
+
+* Edit MCQ Questions
+
+* Delete MCQ Questions
+
+* Question Options Configuration
+
+* Correct Answer Configuration
+
+* Question Marks Configuration
+
+* Negative Marking Configuration
+
+* Question Difficulty Levels
+
+* Question Categories
+
+* Question Randomization
+
+* Question Shuffling
+
+* Option Shuffling
+
+* Examination Timer
+
+* Auto-save Answers
+
+* Examination Auto-submit
+
+* Examination Submission
+
+* Examination Submission Confirmation
+
+* Examination Attempt Tracking
+
+* Examination Attempt History
+
+* Student Exam Eligibility
+
+* Examination Access Control
+
+* Examination Activity Monitoring
+
+* Examination Result Processing
+
+* Examination Result Publishing
+
+* Examination Result Visibility Control
+
+* Examination Reports
+
+* Examination Archive
+
+### 11\. Result Management – 25 Functions
+
+* Generate Examination Results
+
+* Calculate Student Marks
+
+* Calculate Percentage
+
+* Calculate Grade
+
+* Calculate Pass or Fail Status
+
+* Configure Passing Marks
+
+* Configure Grade Rules
+
+* Student Result View
+
+* Batch Result View
+
+* Course Result View
+
+* Branch Result View
+
+* Examination Result Summary
+
+* Student Rank Calculation
+
+* Merit List Generation
+
+* Result Publishing
+
+* Result Publishing Notifications
+
+* Result Correction Workflow
+
+* Result Correction Approval
+
+* Result PDF Generation
+
+* Result Print
+
+* Result Download
+
+* Result History
+
+* Result Comparison Reports
+
+* Result Analytics
+
+* Result Audit Logs
+
+### 12\. Certificate Management – 25 Functions
+
+* Create Certificate Template
+
+* Edit Certificate Template
+
+* Certificate Design Management
+
+* Institute Logo on Certificate
+
+* Student Name on Certificate
+
+* Student ID on Certificate
+
+* Course Name on Certificate
+
+* Course Duration on Certificate
+
+* Certificate Issue Date
+
+* Certificate Number Generation
+
+* Certificate Eligibility Verification
+
+* Certificate Approval
+
+* Certificate Generation
+
+* Certificate PDF Download
+
+* Certificate Printing
+
+* Certificate QR Verification
+
+* Certificate Verification Page
+
+* Certificate Verification Search
+
+* Certificate Reissue
+
+* Certificate Correction
+
+* Certificate Revocation
+
+* Certificate Issue Register
+
+* Branch-wise Certificate Register
+
+* Certificate History
+
+* Certificate Audit Logs
+
+### 13\. Study Material Management – 30 Functions
+
+* Upload PDF Study Material
+
+* Upload Course Notes
+
+* Upload Chapter Notes
+
+* Upload Practical Notes
+
+* Upload Assignments
+
+* Upload Educational Videos
+
+* Upload Learning Documents
+
+* Upload Images
+
+* Create Study Material Categories
+
+* Create Study Material Folders
+
+* Assign Material to Course
+
+* Assign Material to Batch
+
+* Assign Material to Branch
+
+* Assign Material to Students
+
+* Study Material Access Permissions
+
+* PDF Viewer
+
+* Fullscreen PDF Viewer
+
+* Video Player
+
+* Fullscreen Video Player
+
+* Study Material Download
+
+* Study Material Search
+
+* Study Material Bookmark
+
+* Study Material Favorites
+
+* Recent Study Material
+
+* Study Material Completion Tracking
+
+* Material Upload History
+
+* Material Version Management
+
+* Material Replacement
+
+* Material Archive
+
+* Material Access Logs
+
+### 14\. Online Learning Management – 25 Functions
+
+* Student Learning Dashboard
+
+* Course Learning Dashboard
+
+* Chapter-wise Learning
+
+* Lesson-wise Learning
+
+* Video Lesson Playback
+
+* PDF Lesson Reading
+
+* Lesson Completion Marking
+
+* Learning Progress Tracking
+
+* Course Progress Percentage
+
+* Learning Resume
+
+* Recently Viewed Lessons
+
+* Learning Bookmarks
+
+* Lesson Notes
+
+* Personal Learning Notes
+
+* Course Learning History
+
+* Student Learning Activity
+
+* Teacher Learning Content Assignment
+
+* Teacher Lesson Publishing
+
+* Lesson Availability Scheduling
+
+* Course Content Access Control
+
+* Learning Completion Reports
+
+* Student Learning Analytics
+
+* Course Learning Analytics
+
+* Learning Notifications
+
+* Learning Content Archive
+
+### 15\. Student Portal – 30 Functions
+
+* Student Home Dashboard
+
+* Student Profile
+
+* Student ID Card
+
+* Student QR ID
+
+* My Courses
+
+* My Batches
+
+* My Teachers
+
+* My Timetable
+
+* My Attendance
+
+* My Attendance Percentage
+
+* My Exams
+
+* My Exam Schedule
+
+* My Exam Attempts
+
+* My Results
+
+* My Certificates
+
+* My Study Materials
+
+* My Learning Progress
+
+* My Fee Records
+
+* My Fee Receipts
+
+* My Notifications
+
+* My Messages
+
+* My Academic History
+
+* My Admission Details
+
+* My Branch Information
+
+* My Course Completion Status
+
+* My Documents
+
+* My Account Security
+
+* My Password Change
+
+* Student Logout
+
+### 16\. Parent Portal – 20 Functions
+
+* Parent Account Registration
+
+* Parent Account Approval
+
+* Parent Login
+
+* Link Student to Parent
+
+* Student Link Verification
+
+* Parent Dashboard
+
+* Child Profile
+
+* Child Attendance
+
+* Child Attendance Percentage
+
+* Child Examination Schedule
+
+* Child Examination Results
+
+* Child Learning Progress
+
+* Child Course Details
+
+* Child Batch Details
+
+* Child Teacher Details
+
+* Child Fee Records
+
+* Child Fee Receipts
+
+* Child Notifications
+
+* Parent Messages
+
+* Parent Account Security
+
+### 17\. Teacher Portal – 25 Functions
+
+* Teacher Dashboard
+
+* Teacher Profile
+
+* Assigned Courses
+
+* Assigned Batches
+
+* Assigned Students
+
+* Student Profile Access
+
+* Daily Class Schedule
+
+* Class Timetable
+
+* Student Attendance Entry
+
+* Student Attendance Correction
+
+* Attendance Register
+
+* Examination Creation
+
+* Examination Scheduling
+
+* Question Bank Management
+
+* Examination Monitoring
+
+* Examination Result Processing
+
+* Result Publishing Permission
+
+* Study Material Upload
+
+* Study Material Editing
+
+* Lesson Creation
+
+* Lesson Publishing
+
+* Batch Notice Publishing
+
+* Student Progress Tracking
+
+* Teacher Notifications
+
+* Teacher Logout
+
+### 18\. Fee Management – 40 Functions
+
+* Course Fee Configuration
+
+* Student Fee Assignment
+
+* Manual Fee Entry
+
+* Cash Payment Recording
+
+* UPI Payment Recording
+
+* Bank Transfer Recording
+
+* Cheque Payment Recording
+
+* Payment Reference Recording
+
+* Fee Receipt Generation
+
+* Fee Receipt Number Generation
+
+* Fee Receipt PDF
+
+* Fee Receipt Printing
+
+* Fee Receipt Download
+
+* Student Fee History
+
+* Student Fee Status
+
+* Paid Fee Records
+
+* Pending Fee Records
+
+* Fee Due Date Recording
+
+* Fee Reminder Notifications
+
+* Fee Record Correction
+
+* Fee Correction Approval
+
+* Fee Cancellation
+
+* Fee Refund Record
+
+* Fee Refund Approval
+
+* Daily Fee Collection Register
+
+* Monthly Fee Collection Register
+
+* Branch-wise Fee Collection
+
+* Course-wise Fee Collection
+
+* Batch-wise Fee Collection
+
+* Accountant Fee Entry
+
+* Accountant Permissions
+
+* Fee Reports
+
+* Fee Export
+
+* Fee Data Import
+
+* Fee Audit Logs
+
+* Fee Record Search
+
+* Fee Receipt Search
+
+* Fee Receipt Verification
+
+* Fee Payment Confirmation
+
+* Fee Collection Analytics
+
+Excluded: Payment Gateway, Online Checkout, EMI, Installment Plans, Automated Installment Scheduling.
+
+### 19\. Multi-Branch Management – 40 Functions
+
+* Create Institute Branch
+
+* Edit Branch Details
+
+* Branch Name
+
+* Branch Code
+
+* Branch Address
+
+* Branch Contact Details
+
+* Branch Email
+
+* Branch Logo
+
+* Branch Manager Assignment
+
+* Branch Admin Assignment
+
+* Branch Teacher Assignment
+
+* Branch Accountant Assignment
+
+* Branch Receptionist Assignment
+
+* Branch Student Management
+
+* Branch Course Management
+
+* Branch Batch Management
+
+* Branch Admission Management
+
+* Branch Attendance Management
+
+* Branch Examination Management
+
+* Branch Result Management
+
+* Branch Certificate Management
+
+* Branch Fee Management
+
+* Branch Notification Management
+
+* Branch Timetable Management
+
+* Branch Study Material Management
+
+* Branch Reports
+
+* Branch Dashboard
+
+* Branch Performance Analytics
+
+* Branch Student Search
+
+* Branch Teacher Search
+
+* Branch Batch Search
+
+* Branch Course Search
+
+* Branch Data Access Control
+
+* Branch Data Isolation
+
+* Branch Transfer Requests
+
+* Student Branch Transfer
+
+* Teacher Branch Transfer
+
+* Branch Activation
+
+* Branch Deactivation
+
+* Branch Archive
+
+### 20\. Notification Management – 25 Functions
+
+* Admin Notifications
+
+* Student Notifications
+
+* Teacher Notifications
+
+* Parent Notifications
+
+* Branch-specific Notifications
+
+* Course-specific Notifications
+
+* Batch-specific Notifications
+
+* Admission Notifications
+
+* Attendance Notifications
+
+* Examination Notifications
+
+* Result Notifications
+
+* Certificate Notifications
+
+* Fee Reminder Notifications
+
+* Study Material Notifications
+
+* Timetable Notifications
+
+* General Institute Announcements
+
+* Push Notification Integration
+
+* Notification Read Status
+
+* Notification Unread Counter
+
+* Notification History
+
+* Notification Search
+
+* Notification Filtering
+
+* Notification Delivery Status
+
+* Notification Preferences
+
+* Notification Archive
+
+### 21\. Messaging & Communication – 25 Functions
+
+* Admin-to-Teacher Messaging
+
+* Admin-to-Student Messaging
+
+* Teacher-to-Student Messaging
+
+* Parent-to-Institute Messaging
+
+* Branch Manager Messaging
+
+* Student Support Messages
+
+* Message Inbox
+
+* Message Sent History
+
+* Message Search
+
+* Message Read Status
+
+* Message Unread Counter
+
+* Message Attachments
+
+* Message Image Attachments
+
+* Message Document Attachments
+
+* Message Notifications
+
+* Conversation History
+
+* Conversation Archive
+
+* Message Permissions
+
+* Message Reporting
+
+* Message Moderation
+
+* Announcement Broadcast
+
+* Branch Announcement
+
+* Course Announcement
+
+* Batch Announcement
+
+* Communication Audit Logs
+
+### 22\. Reports & Analytics – 35 Functions
+
+* Student Registration Report
+
+* Admission Report
+
+* Student Active Status Report
+
+* Student Course Report
+
+* Student Batch Report
+
+* Student Attendance Report
+
+* Teacher Attendance Report
+
+* Teacher Performance Report
+
+* Course Enrollment Report
+
+* Batch Enrollment Report
+
+* Examination Schedule Report
+
+* Examination Participation Report
+
+* Examination Result Report
+
+* Student Performance Report
+
+* Course Performance Report
+
+* Branch Performance Report
+
+* Branch Admission Report
+
+* Branch Attendance Report
+
+* Branch Examination Report
+
+* Branch Fee Collection Report
+
+* Fee Pending Report
+
+* Fee Receipt Report
+
+* Certificate Issue Report
+
+* Course Completion Report
+
+* Learning Progress Report
+
+* Student Activity Report
+
+* Teacher Activity Report
+
+* Admin Activity Report
+
+* Daily Institute Report
+
+* Weekly Institute Report
+
+* Monthly Institute Report
+
+* Annual Institute Report
+
+* Custom Date Range Reports
+
+* PDF Report Export
+
+* Excel Report Export
+
+### 23\. AI Assistant & AI Tutor – 25 Functions
+
+* Institute AI Assistant
+
+* Student AI Tutor
+
+* Course-specific AI Tutor
+
+* ADCA AI Tutor
+
+* DCA AI Tutor
+
+* Tally AI Tutor
+
+* MS Office AI Tutor
+
+* Advanced Excel AI Tutor
+
+* Computer Fundamentals AI Tutor
+
+* Typing Learning Assistant
+
+* DTP Learning Assistant
+
+* Student Question Answering
+
+* Text Question Input
+
+* Image Question Input
+
+* AI Explanation Generation
+
+* AI Study Notes Generation
+
+* AI Revision Notes Generation
+
+* AI Quiz Generation
+
+* AI Practice Questions
+
+* AI Answer Explanation
+
+* AI Conversation History
+
+* AI Text Copy
+
+* AI Response Read Aloud
+
+* AI Usage Permissions
+
+* AI Tutor Availability Management
+
+### 24\. Timetable Management – 20 Functions
+
+* Create Timetable
+
+* Edit Timetable
+
+* Assign Course Timetable
+
+* Assign Batch Timetable
+
+* Assign Teacher Timetable
+
+* Assign Classroom Timetable
+
+* Branch Timetable
+
+* Weekly Timetable
+
+* Daily Timetable
+
+* Class Start Time
+
+* Class End Time
+
+* Class Duration
+
+* Timetable Conflict Detection
+
+* Teacher Schedule Conflict Detection
+
+* Classroom Schedule Conflict Detection
+
+* Timetable Publishing
+
+* Timetable Updates
+
+* Student Timetable View
+
+* Teacher Timetable View
+
+* Timetable PDF Export
+
+### 25\. Digital ID & QR System – 20 Functions
+
+* Student Digital ID Card
+
+* Teacher Digital ID Card
+
+* Staff Digital ID Card
+
+* Student QR Code
+
+* Teacher QR Code
+
+* Staff QR Code
+
+* ID Card Template
+
+* ID Card Design Customization
+
+* Institute Logo on ID Card
+
+* Branch Name on ID Card
+
+* Student Photograph on ID Card
+
+* Student ID on ID Card
+
+* Course Name on ID Card
+
+* Batch Name on ID Card
+
+* ID Card PDF
+
+* ID Card Printing
+
+* ID Card Download
+
+* QR Code Verification
+
+* ID Card Renewal
+
+* ID Card Reissue
+
+### 26\. Staff & HR Management – 25 Functions
+
+* Create Staff Profile
+
+* Edit Staff Profile
+
+* Staff ID Generation
+
+* Staff Account Management
+
+* Staff Role Assignment
+
+* Staff Branch Assignment
+
+* Staff Department Assignment
+
+* Staff Joining Date
+
+* Staff Employment Status
+
+* Staff Qualification Records
+
+* Staff Document Upload
+
+* Staff Attendance
+
+* Staff Leave Application
+
+* Staff Leave Approval
+
+* Staff Leave History
+
+* Staff Work Schedule
+
+* Staff Activity History
+
+* Staff Performance Records
+
+* Staff Permissions
+
+* Staff Account Activation
+
+* Staff Account Deactivation
+
+* Staff Directory
+
+* Staff Search
+
+* Staff Reports
+
+* Staff Data Export
+
+### 27\. Library Management – 15 Functions
+
+* Create Library Book Record
+
+* Edit Library Book Record
+
+* Book Title Management
+
+* Book Author Management
+
+* Book ISBN Recording
+
+* Book Category Management
+
+* Book Stock Recording
+
+* Book Availability Status
+
+* Book Issue to Student
+
+* Book Issue to Teacher
+
+* Book Return Recording
+
+* Book Issue History
+
+* Student Library Records
+
+* Teacher Library Records
+
+* Library Reports
+
+### 28\. Student Progress Tracking – 20 Functions
+
+* Student Academic Progress
+
+* Student Course Progress
+
+* Student Chapter Progress
+
+* Student Lesson Progress
+
+* Student Attendance Progress
+
+* Student Examination Progress
+
+* Student Marks Progress
+
+* Student Grade Progress
+
+* Student Learning Activity
+
+* Student Assignment Progress
+
+* Student Course Completion
+
+* Student Skill Assessment
+
+* Student Improvement Tracking
+
+* Student Performance Comparison
+
+* Student Progress Timeline
+
+* Teacher Progress Remarks
+
+* Student Progress Report
+
+* Parent Progress Report
+
+* Student Progress Notifications
+
+* Student Progress PDF Export
+
+### 29\. Assignment Management – 20 Functions
+
+* Create Assignment
+
+* Edit Assignment
+
+* Delete Assignment
+
+* Assign Assignment to Course
+
+* Assign Assignment to Batch
+
+* Assign Assignment to Branch
+
+* Assignment Instructions
+
+* Assignment Due Date
+
+* Assignment Attachment Upload
+
+* Assignment Submission
+
+* Student Assignment Upload
+
+* Assignment Submission History
+
+* Assignment Review
+
+* Assignment Evaluation
+
+* Assignment Marks
+
+* Teacher Feedback
+
+* Assignment Status Tracking
+
+* Assignment Completion Reports
+
+* Assignment Notifications
+
+* Assignment Archive
+
+### 30\. Settings & Customization – 25 Functions
+
+* Institute Profile Settings
+
+* Institute Name Configuration
+
+* Institute Logo Configuration
+
+* Institute Address Configuration
+
+* Institute Contact Configuration
+
+* Institute Email Configuration
+
+* Institute Website Configuration
+
+* Institute Branding Settings
+
+* App Theme Settings
+
+* Light Mode
+
+* Dark Mode
+
+* System Theme Mode
+
+* Language Settings
+
+* Date Format Settings
+
+* Time Format Settings
+
+* Notification Settings
+
+* Account Settings
+
+* Security Settings
+
+* Privacy Settings
+
+* Session Management
+
+* Password Change
+
+* Device Logout
+
+* Logout from All Devices
+
+* App Version Information
+
+* App Configuration Management
+
+### 31\. Security & Authentication – 30 Functions
+
+* Admin Login
+
+* Branch Admin Login
+
+* Teacher Login
+
+* Student Login
+
+* Parent Login
+
+* Accountant Login
+
+* Receptionist Login
+
+* Firebase Authentication
+
+* Secure Username Authentication
+
+* Secure Password Authentication
+
+* Unique Username Validation
+
+* Password Reset
+
+* Password Change
+
+* Account Activation Verification
+
+* Account Suspension
+
+* Account Recovery
+
+* Role-based Access Control
+
+* Permission-based Access Control
+
+* Branch-based Data Authorization
+
+* Student Data Isolation
+
+* Teacher Data Isolation
+
+* Parent Student-link Authorization
+
+* Session Expiration
+
+* Device Session Management
+
+* Logout from All Devices
+
+* Login Activity History
+
+* Failed Login Tracking
+
+* Security Audit Logs
+
+* Firebase App Check Integration
+
+* Secure Database Rules
+
+### 32\. Backup & Data Management – 20 Functions
+
+* Database Backup Management
+
+* Authorized Data Export
+
+* Student Data Export
+
+* Teacher Data Export
+
+* Course Data Export
+
+* Batch Data Export
+
+* Attendance Data Export
+
+* Examination Data Export
+
+* Result Data Export
+
+* Fee Data Export
+
+* Certificate Data Export
+
+* CSV Import
+
+* Excel Import
+
+* Import Validation
+
+* Import Error Reporting
+
+* Duplicate Record Detection
+
+* Backup Verification
+
+* Data Restore Authorization
+
+* Data Recovery
+
+* Data Integrity Verification
+
+### 33\. Audit & Activity Logs – 20 Functions
+
+* Admin Activity Logs
+
+* Teacher Activity Logs
+
+* Student Activity Logs
+
+* Branch Manager Activity Logs
+
+* Accountant Activity Logs
+
+* Admission Activity Logs
+
+* Student Profile Change Logs
+
+* Teacher Profile Change Logs
+
+* Attendance Change Logs
+
+* Examination Change Logs
+
+* Result Change Logs
+
+* Fee Change Logs
+
+* Certificate Change Logs
+
+* Permission Change Logs
+
+* Login Activity Logs
+
+* Logout Activity Logs
+
+* Data Export Activity Logs
+
+* Data Import Activity Logs
+
+* Security Event Logs
+
+* Audit Log Search
+
+### 34\. Institute Website Integration – 15 Functions
+
+* Institute Website Link
+
+* Public Course Catalog
+
+* Public Course Details
+
+* Public Admission Enquiry Form
+
+* Public Contact Form
+
+* Public Institute Information
+
+* Branch Information Page
+
+* Course Inquiry Management
+
+* Website Enquiry Dashboard
+
+* Enquiry-to-Admission Conversion
+
+* Public Certificate Verification
+
+* Website Notification Integration
+
+* Website Course Updates
+
+* Website Branch Updates
+
+* Website Integration Settings
+
+### 35\. System Administration – 25 Functions
+
+* System Configuration
+
+* Firebase Configuration Validation
+
+* Database Connection Status
+
+* Backend Connectivity Status
+
+* Authentication Service Status
+
+* Firestore Sync Status
+
+* Storage Connectivity Status
+
+* Firebase App Check Status
+
+* Cloud Error Monitoring
+
+* Failed Operation Tracking
+
+* Sync Retry Management
+
+* Data Conflict Detection
+
+* Data Conflict Resolution
+
+* Background Sync Management
+
+* Offline Data Queue
+
+* Network Status Monitoring
+
+* App Error Reporting
+
+* Application Diagnostics
+
+* Performance Monitoring
+
+* Database Integrity Checks
+
+* System Maintenance Mode
+
+* System Access Logs
+
+* Configuration Audit
+
+* System Health Reports
+
+* System Administration Permissions
+
+### 36\. Advanced Search & Global Search – 20 Functions
+
+* Global Student Search
+
+* Global Teacher Search
+
+* Global Course Search
+
+* Global Batch Search
+
+* Global Branch Search
+
+* Global Examination Search
+
+* Global Result Search
+
+* Global Certificate Search
+
+* Global Fee Receipt Search
+
+* Student ID Search
+
+* Teacher ID Search
+
+* Batch Code Search
+
+* Course Code Search
+
+* Certificate Number Search
+
+* Receipt Number Search
+
+* Search by Date
+
+* Search by Status
+
+* Search by Branch
+
+* Search by Course
+
+* Search by Batch
+
+### 37\. Advanced Dashboard & Quick Actions – 20 Functions
+
+* Admin Quick Action Panel
+
+* Branch Admin Quick Action Panel
+
+* Teacher Quick Action Panel
+
+* Student Quick Action Panel
+
+* Parent Quick Action Panel
+
+* Quick Student Search
+
+* Quick Admission Search
+
+* Quick Batch Search
+
+* Quick Attendance Search
+
+* Quick Examination Search
+
+* Quick Result Search
+
+* Quick Certificate Search
+
+* Quick Fee Receipt Search
+
+* Dashboard Date Filters
+
+* Dashboard Branch Filters
+
+* Dashboard Course Filters
+
+* Dashboard Batch Filters
+
+* Dashboard Widget Visibility
+
+* Dashboard Layout Customization
+
+* Dashboard Data Refresh
+
+### 38\. Student Support & Help Center – 15 Functions
+
+* Student Help Center
+
+* Teacher Help Center
+
+* Parent Help Center
+
+* Frequently Asked Questions
+
+* Student Support Request
+
+* Teacher Support Request
+
+* Parent Support Request
+
+* Support Ticket Creation
+
+* Support Ticket Status
+
+* Support Ticket Assignment
+
+* Support Ticket Responses
+
+* Support Ticket History
+
+* Support Ticket Notifications
+
+* Support Ticket Search
+
+* Support Ticket Reports
+
+### 39\. Institute Calendar & Events – 20 Functions
+
+* Institute Calendar
+
+* Academic Calendar
+
+* Examination Calendar
+
+* Admission Calendar
+
+* Course Calendar
+
+* Batch Calendar
+
+* Branch Calendar
+
+* Teacher Calendar
+
+* Student Calendar
+
+* Parent Calendar
+
+* Holiday Management
+
+* Institute Event Creation
+
+* Event Editing
+
+* Event Deletion
+
+* Event Registration
+
+* Event Notifications
+
+* Event Reminders
+
+* Calendar Search
+
+* Calendar Filtering
+
+* Calendar PDF Export
+
+### 40\. Advanced Institute Management – 20 Functions
+
+* Institute Organization Structure
+
+* Institute Department Management
+
+* Branch Department Assignment
+
+* Academic Session Management
+
+* Academic Year Management
+
+* Academic Session Student Mapping
+
+* Academic Session Course Mapping
+
+* Academic Session Batch Mapping
+
+* Student Academic Promotion
+
+* Student Course Transfer
+
+* Student Batch Transfer
+
+* Student Branch Transfer
+
+* Teacher Course Transfer
+
+* Teacher Batch Transfer
+
+* Academic Session Archive
+
+* Institute-wide Student Directory
+
+* Institute-wide Teacher Directory
+
+* Institute-wide Course Directory
+
+* Institute-wide Batch Directory
+
+* Institute-wide Academic Reports
+
+### 41\. Student App Navigation Structure
+
+### Bottom Navigation Bar – 5 Items
+
+* Home – Student Dashboard
+
+* Courses – Enrolled Courses
+
+* Exams – Scheduled and Available Exams
+
+* Attendance – Attendance Percentage and History
+
+* Profile – Student Profile and Account
+
+### Student Home Screen
+
+* Welcome Message
+
+* Student ID Display
+
+* Current Course Display
+
+* Current Batch Display
+
+* Branch Information
+
+* Today's Class Schedule
+
+* Upcoming Examination
+
+* Attendance Summary
+
+* Learning Progress Summary
+
+* Latest Results
+
+* Recent Notifications
+
+* Study Material Shortcut
+
+* AI Tutor Shortcut
+
+* Certificate Shortcut
+
+* Fee Records Shortcut
+
+* Student Help Shortcut
+
+### 42\. Teacher App Navigation Structure
+
+### Bottom Navigation Bar – 5 Items
+
+* Home – Teacher Dashboard
+
+* Classes – Assigned Classes and Batches
+
+* Attendance – Attendance Entry and Registers
+
+* Exams – Examination Management
+
+* Profile – Teacher Profile and Settings
+
+### Teacher Home Screen
+
+* Teacher Welcome Dashboard
+
+* Today's Teaching Schedule
+
+* Assigned Batch Summary
+
+* Assigned Student Summary
+
+* Today's Attendance Shortcut
+
+* Upcoming Examinations
+
+* Recent Examination Results
+
+* Study Material Upload Shortcut
+
+* Student Progress Overview
+
+* Teacher Notifications
+
+* Branch Information
+
+* Quick Student Search
+
+* Quick Batch Search
+
+* Quick Examination Creation
+
+* Teacher Help Shortcut
+
+### 43\. Parent App Navigation Structure
+
+### Bottom Navigation Bar – 5 Items
+
+* Home – Parent Dashboard
+
+* Student – Child Profile
+
+* Attendance – Child Attendance
+
+* Results – Child Examination Results
+
+* Profile – Parent Account
+
+### Parent Home Screen
+
+* Child Information
+
+* Child Course Information
+
+* Child Batch Information
+
+* Child Branch Information
+
+* Today's Attendance Status
+
+* Attendance Percentage
+
+* Upcoming Examination
+
+* Latest Examination Result
+
+* Course Progress
+
+* Fee Record Shortcut
+
+* Certificate Shortcut
+
+* Teacher Information
+
+* Parent Notifications
+
+* Parent Messages
+
+* Parent Support Shortcut
+
+### 44\. Admin App Navigation Structure
+
+### Admin Sidebar
+
+* Dashboard
+
+* Students
+
+* Admissions
+
+* Teachers
+
+* Courses
+
+* Batches
+
+* Attendance
+
+* Examinations
+
+* Results
+
+* Fees
+
+* Certificates
+
+* Branches
+
+* Reports
+
+* Notifications
+
+* Messages
+
+* Staff & HR
+
+* Assignments
+
+* Timetable
+
+* Library
+
+* AI Assistant
+
+* Academic Calendar
+
+* Support Tickets
+
+* Audit Logs
+
+* Backup & Data Management
+
+* System Administration
+
+* Settings
+
+### Admin Quick Navigation
+
+* Add Student
+
+* Add Teacher
+
+* New Admission
+
+* Create Course
+
+* Create Batch
+
+* Mark Attendance
+
+* Create Examination
+
+* Publish Results
+
+* Generate Certificate
+
+* Record Fee
+
+* Create Branch
+
+* Generate Reports
+
+### 45\. Additional Advanced Features
+
+* Role-specific App Navigation
+
+* Dynamic Navigation Permissions
+
+* Navigation Item Visibility Control
+
+* Branch-specific Navigation
+
+* Course-specific Navigation
+
+* Student-specific Navigation
+
+* Teacher-specific Navigation
+
+* Parent-specific Navigation
+
+* Admin Sidebar Collapse
+
+* Admin Sidebar Expand
+
+* Navigation Search
+
+* Navigation History
+
+* Dashboard Quick Links
+
+* Recent Screen History
+
+* Deep Link Navigation
+
+* Notification Deep Links
+
+* Exam Deep Links
+
+* Result Deep Links
+
+* Student Profile Deep Links
+
+* Branch Dashboard Deep Links
+
+### Final App Requirements
+
+* App Name: WAQAR INSTITUTE
+
+* Platform: Native Android Application
+
+* Architecture: Modular Android Architecture
+
+* Authentication: Firebase Authentication
+
+* Database: Firebase Firestore
+
+* File Storage: Firebase Storage
+
+* Backend: Secure backend services wherever required
+
+* Student Accounts: Real student accounts
+
+* Teacher Accounts: Real teacher accounts
+
+* Parent Accounts: Verified parent accounts
+
+* Admin Accounts: Authorized administrator accounts
+
+* Multi-Branch: Fully supported
+
+* Data: Real database records only
+
+* Demo Data: Not allowed
+
+* Dummy Data: Not allowed
+
+* Mock Backend: Not allowed
+
+* Payment Gateway: Not included
+
+* Installment System: Not included
+
+* Navigation: Role-based navigation
+
+* UI: Modern, responsive, professional Android interface
+
+* Security: Strict authentication and authorization
+
+* Synchronization: Real backend synchronization
+
+* Offline Support: Secure offline functionality where applicable
+
+* Reports: PDF and Excel exports where supported
+
+* Testing: Real backend integration testing
+
+Total Blueprint: 1148 numbered functions and navigation requirements.
+
+Note: This is a functional blueprint, not a claim that the app has already implemented these functions. Some features require additional backend services, permissions, and testing before they can operate correctly.

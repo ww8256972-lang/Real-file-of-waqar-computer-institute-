@@ -1,0 +1,28 @@
+// FlatBuffers Zero-Copy Schema for Waqar Institute Proctored Examinations
+// Note: Server never includes correct_option_index in student bundles prior to submission.
+namespace com.waqarinstitute.erp.flatbuffers;
+
+table Option {
+  option_id: int;
+  label_code: string;
+  option_text: string;
+}
+
+table Question {
+  question_id: int;
+  question_number: int;
+  prompt_text: string;
+  options: [Option];
+  marks: int = 2;
+}
+
+table ExamPaper {
+  exam_id: string;
+  course_code: string;
+  title: string;
+  duration_seconds: int = 1800;
+  questions: [Question];
+}
+
+root_type ExamPaper;
+file_identifier "ESYN";

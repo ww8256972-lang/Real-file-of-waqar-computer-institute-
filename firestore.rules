@@ -1,0 +1,186 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // =========================================================================
+    // HELPER FUNCTIONS (SERVER-ENFORCED FIREBASE AUTH + ROLE CLAIMS)
+    // =========================================================================
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function currentRole() {
+      return !isSignedIn() ? '' : (
+        ('role' in request.auth.token && request.auth.token.role is string)
+          ? request.auth.token.role
+          : (
+            exists(/databases/$(database)/documents/users/$(request.auth.uid))
+              ? get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role
+              : ''
+          )
+      );
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (currentRole() == 'admin' || currentRole() == 'super_admin');
+    }
+
+    function isTeacher() {
+      return isSignedIn() && (currentRole() == 'teacher' || isAdmin());
+    }
+
+    function isStudent() {
+      return isSignedIn() && currentRole() == 'student';
+    }
+
+    function isParent() {
+      return isSignedIn() && currentRole() == 'parent';
+    }
+
+    function hasNoPasswordField(data) {
+      return !('password' in data) && !('passwordHash' in data);
+    }
+
+    // =========================================================================
+    // 1. USERS COLLECTION (NO UNAUTHENTICATED GET/LIST, NO PASSWORD FIELDS)
+    // =========================================================================
+    match /users/{uid} {
+      allow get: if isSignedIn() && (request.auth.uid == uid || isAdmin() || isTeacher());
+      allow list: if isAdmin() || isTeacher();
+      allow create: if isAdmin()
+                    && hasNoPasswordField(request.resource.data)
+                    && request.resource.data.role in ['student', 'teacher', 'parent', 'admin'];
+      allow update: if hasNoPasswordField(request.resource.data) && (
+                      isAdmin() || (
+                        isSignedIn()
+                        && request.auth.uid == uid
+                        && !request.resource.data.diff(resource.data).affectedKeys()
+                            .hasAny(['role', 'uid', 'branchId', 'linkedEntityId', 'status'])
+                      )
+                    );
+      allow delete: if isAdmin();
+    }
+
+    // =========================================================================
+    // 2. SERVER-AUTHORITATIVE COLLECTIONS (ADMIN SDK / CLOUD FUNCTIONS ONLY)
+    // =========================================================================
+    match /attendance/{recordId} {
+      allow get, list: if isSignedIn() && (
+        isAdmin() || isTeacher() ||
+        resource.data.studentId == request.auth.uid ||
+        resource.data.parentUid == request.auth.uid
+      );
+      allow create, update, delete: if false;
+    }
+
+    match /results/{resultId} {
+      allow get, list: if isSignedIn() && (
+        isAdmin() || isTeacher() ||
+        resource.data.studentId == request.auth.uid ||
+        resource.data.parentUid == request.auth.uid
+      );
+      allow create, update, delete: if false;
+    }
+
+    match /audit_logs/{logId} {
+      allow get, list: if isAdmin();
+      allow create, update, delete: if false;
+    }
+
+    match /studentSessions/{uid} {
+      allow get: if isSignedIn() && (request.auth.uid == uid || isAdmin());
+      allow list: if isAdmin();
+      allow create, update, delete: if false;
+    }
+
+    match /privateSessionKeys/{sessionId} {
+      allow read, write: if false;
+    }
+
+    // =========================================================================
+    // 3. INSTITUTE CORE COLLECTIONS (BRANCHES, COURSES, BATCHES, EXAMS, FEES)
+    // =========================================================================
+    match /branches/{branchId} {
+      allow read: if isSignedIn();
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /courses/{courseId} {
+      allow read: if isSignedIn();
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /batches/{batchId} {
+      allow read: if isSignedIn();
+      allow create, update: if isAdmin() || isTeacher();
+      allow delete: if isAdmin();
+    }
+
+    match /exams/{examId} {
+      allow read: if isSignedIn();
+      allow create, update: if (isAdmin() || isTeacher())
+                            && !('answerKey' in request.resource.data);
+      allow delete: if isAdmin();
+
+      match /answerKey/{docId} {
+        allow read: if isAdmin() || isTeacher();
+        allow write: if isAdmin() || isTeacher();
+      }
+    }
+
+    match /examSubmissions/{submissionId} {
+      allow get: if isSignedIn() && (
+        isAdmin() || isTeacher() || resource.data.studentId == request.auth.uid
+      );
+      allow list: if isAdmin() || isTeacher();
+      allow create: if isStudent()
+                    && request.resource.data.studentId == request.auth.uid
+                    && !('score' in request.resource.data)
+                    && !('graded' in request.resource.data);
+      allow update, delete: if false;
+    }
+
+    match /fees/{feeId} {
+      allow get, list: if isSignedIn() && (
+        isAdmin() ||
+        resource.data.studentId == request.auth.uid ||
+        resource.data.parentUid == request.auth.uid
+      );
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /notifications/{notificationId} {
+      allow read: if isSignedIn();
+      allow create, update, delete: if isAdmin() || isTeacher();
+    }
+
+    match /messages/{messageId} {
+      allow get, list: if isSignedIn() && (
+        isAdmin() ||
+        resource.data.senderUid == request.auth.uid ||
+        resource.data.recipientUid == request.auth.uid
+      );
+      allow create: if isSignedIn() && request.resource.data.senderUid == request.auth.uid;
+      allow update, delete: if isAdmin();
+    }
+
+    // =========================================================================
+    // 4. UNIFIED ERP RECORDS (SCOPED BY ROLE & MODULE)
+    // =========================================================================
+    match /erpRecords/{recordId} {
+      allow read: if isSignedIn();
+      allow create, update: if (isAdmin() || isTeacher())
+                            && request.resource.data.module is string
+                            && hasNoPasswordField(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    // =========================================================================
+    // 5. DEFAULT DENY ALL OTHER PATHS
+    // =========================================================================
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

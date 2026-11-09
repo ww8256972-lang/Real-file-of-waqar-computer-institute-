@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Grow Up Computer Skill – Secure Portal</title>
+<style>
+@property --a{syntax:"<color>";inherits:true;initial-value:#a970ff}
+@property --b{syntax:"<color>";inherits:true;initial-value:#ff4ecd}
+:root{--a:#a970ff;--b:#ff4ecd;--text:#eef1ff;--muted:#8d97c2;--line:rgba(255,255,255,.12);--glass:rgba(14,18,42,.46);color-scheme:dark;transition:--a .7s ease,--b .7s ease;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%}
+body{background:#05060f;color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow-x:hidden}
+#gl{position:fixed;inset:0;width:100%;height:100%;display:block}
+.fallback{position:fixed;inset:0;background:radial-gradient(700px 500px at 50% 80%,color-mix(in srgb,var(--a) 35%,transparent),transparent),#05060f;z-index:-1}
+.vig{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 35%,rgba(5,6,15,.85))}
+.logo{position:fixed;top:calc(env(safe-area-inset-top,0px) + 18px);left:22px;display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.02em;z-index:2}
+.logo i{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:linear-gradient(135deg,var(--a),var(--b));box-shadow:0 0 22px var(--a);font-style:normal;font-size:16px;color:#05060f}
+.logo small{display:block;font-size:10px;font-weight:600;letter-spacing:.2em;color:var(--muted)}
+main{position:relative;z-index:1;min-height:100vh;display:grid;place-items:center;padding:78px 14px 30px}
+.wrap{width:100%;max-width:420px;perspective:1100px}
+.card{position:relative;padding:22px;border-radius:28px;background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);box-shadow:0 0 0 1px rgba(255,255,255,.04) inset,0 40px 80px -30px #000,0 0 90px -30px var(--a);transition:transform .2s ease-out;animation:in 1s cubic-bezier(.2,.9,.2,1) both}
+@keyframes in{from{opacity:0;transform:translateY(40px) rotateX(18deg) scale(.96)}}
+@property --ang{syntax:"<angle>";initial-value:0deg;inherits:false}
+@keyframes spin{to{--ang:360deg}}
+.card::before{content:"";position:absolute;inset:-1px;border-radius:29px;padding:1.5px;background:conic-gradient(from var(--ang),transparent 0 60%,var(--a),var(--b),transparent);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:spin 5s linear infinite;pointer-events:none}
+.seg{position:relative;display:grid;grid-template-columns:repeat(4,1fr);padding:5px;border-radius:18px;background:rgba(0,0,0,.35);border:1px solid var(--line)}
+.ind{position:absolute;top:5px;bottom:5px;left:5px;width:calc(25% - 2.5px);border-radius:13px;background:linear-gradient(135deg,color-mix(in srgb,var(--a) 85%,#000),color-mix(in srgb,var(--b) 85%,#000));box-shadow:0 0 22px -2px var(--a);transition:transform .55s cubic-bezier(.5,1.5,.5,1)}
+.seg button{position:relative;z-index:1;border:0;background:none;color:var(--muted);padding:10px 0 8px;font:600 11px system-ui,sans-serif;letter-spacing:.04em;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;transition:color .3s}
+.seg button[aria-selected="true"]{color:#fff}
+.seg svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:transform .4s}
+.seg button[aria-selected="true"] svg{transform:scale(1.18)}
+#rb{margin-top:20px}
+.tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.18em;color:var(--a);text-shadow:0 0 12px var(--a)}
+h1{margin:6px 0 4px;font-size:27px;letter-spacing:-.02em;line-height:1.15}
+h1 span{background:linear-gradient(90deg,var(--a),var(--b));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{margin:0 0 6px;color:var(--muted);font-size:14px;line-height:1.45}
+.fl{position:relative;margin-top:14px}
+.fl input{width:100%;height:56px;padding:22px 48px 6px 16px;border-radius:16px;border:1px solid var(--line);background:rgba(0,0,0,.32);color:var(--text);font-size:16px;outline:0;transition:border-color .3s,box-shadow .3s}
+.fl label{position:absolute;left:16px;top:18px;font-size:15px;color:var(--muted);pointer-events:none;transition:.22s}
+.fl input:focus,.fl input:not(:placeholder-shown){}
+.fl input:focus+label,.fl input:not(:placeholder-shown)+label{top:8px;font-size:11px;letter-spacing:.06em}
+.fl input:focus{border-color:var(--a);box-shadow:0 0 0 4px color-mix(in srgb,var(--a) 22%,transparent),0 0 24px -4px var(--a)}
+.fl input:focus+label{color:var(--a)}
+.eye{position:absolute;right:8px;top:10px;width:36px;height:36px;border:0;border-radius:10px;background:none;color:var(--muted);cursor:pointer;display:grid;place-items:center}
+.eye svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
+.row{display:flex;justify-content:space-between;align-items:center;margin:16px 0 4px;font-size:13px;color:var(--muted)}
+.row label{display:flex;gap:8px;align-items:center;cursor:pointer}
+.row input{accent-color:var(--a)}.row a{color:var(--a);text-decoration:none;font-weight:600}
+.go{position:relative;overflow:hidden;width:100%;height:54px;margin-top:14px;border:0;border-radius:16px;color:#05060f;font:800 15px system-ui,sans-serif;letter-spacing:.06em;cursor:pointer;background:linear-gradient(110deg,var(--a),var(--b));box-shadow:0 10px 40px -8px var(--a);transition:transform .2s,box-shadow .3s}
+.go:hover{transform:translateY(-2px);box-shadow:0 16px 50px -6px var(--a)}.go:active{transform:scale(.98)}.go:disabled{cursor:wait}
+.go::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.55) 50%,transparent 70%);transform:translateX(-120%);animation:sh 3.2s infinite}
+@keyframes sh{to{transform:translateX(120%)}}
+.sp{display:inline-block;width:16px;height:16px;border:2.5px solid #05060f;border-top-color:transparent;border-radius:50%;animation:r .7s linear infinite;vertical-align:-3px;margin-right:8px}
+@keyframes r{to{transform:rotate(360deg)}}
+.msg{min-height:18px;margin-top:12px;text-align:center;font-size:12.5px;color:var(--muted)}
+.chips{display:flex;justify-content:center;gap:14px;margin-top:6px;font-size:11px;color:var(--muted);letter-spacing:.06em}
+.chips span::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--a);box-shadow:0 0 8px var(--a);margin-right:6px}
+@media(prefers-reduced-motion:reduce){.card::before,.go::after{animation:none}}
+</style>
+</head>
+<body>
+<div class="fallback"></div><canvas id="gl"></canvas><div class="vig"></div>
+<div class="logo"><i>G</i><div>GROW UP<small>COMPUTER SKILL</small></div></div>
+<main><div class="wrap">
+<form class="card" id="card" autocomplete="off">
+  <div class="seg" id="seg" role="tablist"><div class="ind" id="ind"></div></div>
+  <div id="rb">
+    <span class="tag" id="tag"></span>
+    <h1 id="ttl"></h1><p class="sub" id="sub"></p>
+    <div class="fl"><input id="uid" placeholder=" " autocomplete="off"><label for="uid" id="ulab"></label></div>
+    <div class="fl"><input id="pw" type="password" placeholder=" " autocomplete="off"><label for="pw">Password</label>
+      <button type="button" class="eye" id="eye" aria-label="Show password"><svg viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+    <div class="row"><label><input type="checkbox"> Remember me</label><a href="#forgot">Forgot password?</a></div>
+    <button class="go" type="submit" id="go"></button>
+  </div>
+  <div class="msg" id="msg" role="status">Demo: koi bhi ID + 4+ letters ka password</div>
+  <div class="chips"><span>Encrypted</span><span>Secure</span><span>24/7</span></div>
+</form></div></main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const $=id=>document.getElementById(id),root=document.documentElement;
+const R=[
+{n:'Admin',a:'#a970ff',b:'#ff4ecd',t:'CONTROL CENTER',h:'Admin <span>Portal</span>',s:'Poora institute manage karo: students, staff, fees aur reports.',u:'Admin ID or Email',i:'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/>'},
+{n:'Student',a:'#00e1ff',b:'#4d7cff',t:'LEARNING HUB',h:'Student <span>Portal</span>',s:'Courses, notes, results aur certificates ek jagah.',u:'Student ID or Roll No.',i:'<path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c3 2 9 2 12 0v-5"/>'},
+{n:'Teacher',a:'#2dff9b',b:'#d6ff3d',t:'CLASSROOM',h:'Teacher <span>Portal</span>',s:'Attendance, marks aur batches ko asaani se sambhalo.',u:'Teacher ID or Email',i:'<path d="M3 4h18v11H3z"/><path d="M12 15v5M8 20h8"/>'},
+{n:'Parent',a:'#ffb02e',b:'#ff4d6d',t:'FAMILY VIEW',h:'Parent <span>Portal</span>',s:'Bachche ki progress, attendance aur fees track karo.',u:'Mobile No. or Parent ID',i:'<circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 15c2.5 0 4 1.7 4 4"/>'}];
+let cur=0;const seg=$('seg');
+R.forEach((r,x)=>{const b=document.createElement('button');b.type='button';b.setAttribute('role','tab');b.innerHTML='<svg viewBox="0 0 24 24">'+r.i+'</svg>'+r.n.toUpperCase();b.onclick=()=>set(x);seg.appendChild(b)});
+function set(x,first){cur=x;const r=R[x];
+root.style.setProperty('--a',r.a);root.style.setProperty('--b',r.b);
+[...seg.children].slice(1).forEach((b,j)=>b.setAttribute('aria-selected',j===x));
+$('ind').style.transform='translateX('+x*100+'%)';
+$('tag').textContent=r.t;$('ttl').innerHTML=r.h;$('sub').textContent=r.s;$('ulab').textContent=r.u;$('go').textContent='LOGIN AS '+r.n.toUpperCase();
+if(!first){$('rb').animate([{opacity:0,transform:'translateY(14px) scale(.98)',filter:'blur(6px)'},{opacity:1,transform:'none',filter:'blur(0)'}],{duration:550,easing:'cubic-bezier(.2,.9,.2,1)'});pulse(1)}
+tgt.a.set(r.a);tgt.b.set(r.b)}
+$('eye').onclick=()=>{const p=$('pw');p.type=p.type==='password'?'text':'password'};
+/* ---------- Three.js particle wave ---------- */
+const tgt={a:new THREE.Color(R[0].a),b:new THREE.Color(R[0].b)};let pulseT=-1,boost=0,mouseP=0;
+const mob=innerWidth<700,N=mob?90:150,SP=mob?1.15:.78;
+let renderer,scene,cam,U,clock=new THREE.Clock(),mx=0,my=0,mxs=0,mys=0;
+try{
+renderer=new THREE.WebGLRenderer({canvas:$('gl'),antialias:false,alpha:true,powerPreference:'high-performance'});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+scene=new THREE.Scene();cam=new THREE.PerspectiveCamera(60,1,.1,400);
+const pos=new Float32Array(N*N*3),sz=new Float32Array(N*N);let k=0;
+for(let i=0;i<N;i++)for(let j=0;j<N;j++){pos[k*3]=(i-N/2)*SP;pos[k*3+1]=0;pos[k*3+2]=(j-N*.72)*SP;sz[k]=.6+Math.random()*.9;k++}
+const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(pos,3));g.setAttribute('aS',new THREE.BufferAttribute(sz,1));
+U={uTime:{value:0},uAmp:{value:1},uRing:{value:0},uRingA:{value:0},uSize:{value:renderer.getPixelRatio()},uMouse:{value:new THREE.Vector2(0,99)},uMouseP:{value:0},uC:{value:new THREE.Color(R[0].a)},uC2:{value:new THREE.Color(R[0].b)}};
+const m=new THREE.ShaderMaterial({uniforms:U,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
+vertexShader:`uniform float uTime,uAmp,uRing,uRingA,uSize,uMouseP;uniform vec2 uMouse;attribute float aS;varying float vH,vF;
+void main(){vec3 p=position;
+float w=sin(p.x*.22+uTime*.8)*1.4+cos(p.z*.18+uTime*.6)*1.6+sin((p.x+p.z)*.12+uTime*1.1)*1.1;
+float d=distance(p.xz,uMouse);w+=exp(-d*d*.012)*uMouseP*sin(d*.9-uTime*5.)*2.4;
+float r=length(p.xz-vec2(0.,-8.));w+=exp(-pow(r-uRing,2.)*.025)*uRingA*7.;
+p.y=w*uAmp;vH=w;vec4 mv=modelViewMatrix*vec4(p,1.);gl_Position=projectionMatrix*mv;
+gl_PointSize=uSize*aS*(1.+clamp(w*.16,0.,1.4))*(34./-mv.z);vF=1.-smoothstep(45.,115.,-mv.z);}`,
+fragmentShader:`uniform vec3 uC,uC2;varying float vH,vF;
+void main(){vec2 c=gl_PointCoord-.5;float d=length(c);if(d>.5)discard;float a=pow(1.-d*2.,1.5);
+vec3 col=mix(uC,uC2,clamp(vH*.16+.5,0.,1.));gl_FragColor=vec4(col*(1.+max(vH,0.)*.2),a*vF);}`});
+scene.add(new THREE.Points(g,m));
+const pl=new THREE.Plane(new THREE.Vector3(0,1,0),0),rc=new THREE.Raycaster(),v2=new THREE.Vector2(),hit=new THREE.Vector3();
+function size(){const w=innerWidth,h=innerHeight;renderer.setSize(w,h,false);cam.aspect=w/h;cam.position.z=w/h<.8?30:24;cam.updateProjectionMatrix()}
+size();addEventListener('resize',size);
+addEventListener('pointermove',e=>{mx=e.clientX/innerWidth*2-1;my=e.clientY/innerHeight*2-1;v2.set(mx,-my);rc.setFromCamera(v2,cam);if(rc.ray.intersectPlane(pl,hit)){U.uMouse.value.set(hit.x,hit.z);mouseP=1}});
+const calm=matchMedia('(prefers-reduced-motion:reduce)').matches?.25:1;
+(function loop(){requestAnimationFrame(loop);const dt=Math.min(clock.getDelta(),.05);U.uTime.value+=dt*calm;
+mxs+=(mx-mxs)*.04;mys+=(my-mys)*.04;cam.position.x=mxs*5;cam.position.y=11+mys*-2.5;cam.lookAt(0,1,-14);
+U.uC.value.lerp(tgt.a,.06);U.uC2.value.lerp(tgt.b,.06);
+mouseP+=(0-mouseP)*.012;U.uMouseP.value=mouseP;
+if(pulseT>=0){pulseT+=dt/1.5;U.uRing.value=pulseT*95;U.uRingA.value=Math.max(0,1-pulseT)*(1+boost);if(pulseT>1){pulseT=-1;U.uRingA.value=0}}
+U.uAmp.value+=((1+boost*.6)-U.uAmp.value)*.06;boost*=.985;
+renderer.render(scene,cam)})();
+}catch(e){$('gl').style.display='none'}
+function pulse(s){pulseT=0;boost=Math.max(boost,s>1?1.6:0)}
+/* ---------- form ---------- */
+const card=$('card');
+card.onsubmit=e=>{e.preventDefault();const g=$('go'),r=R[cur];g.disabled=true;g.innerHTML='<span class="sp"></span>VERIFYING';$('msg').textContent='';
+setTimeout(()=>{const ok=$('uid').value.trim()&&$('pw').value.length>=4;
+if(ok){g.textContent='✔ ACCESS GRANTED';$('msg').style.color='var(--a)';$('msg').textContent='Welcome, '+r.n+'! (Demo – backend connect karna baaki hai)';pulse(2);boost=1.6}
+else{g.textContent='✖ TRY AGAIN';$('msg').style.color='#ff6b8b';$('msg').textContent='ID ya password galat hai (password 4+ letters ka rakho)';card.animate([{translate:'0'},{translate:'-9px'},{translate:'9px'},{translate:'-5px'},{translate:'0'}],{duration:420})}
+setTimeout(()=>{g.disabled=false;g.textContent='LOGIN AS '+r.n.toUpperCase();$('msg').style.color=''},2200)},1100)};
+card.parentElement.addEventListener('pointermove',e=>{if(e.pointerType==='touch')return;const b=card.getBoundingClientRect(),x=(e.clientX-b.left)/b.width-.5,y=(e.clientY-b.top)/b.height-.5;card.style.transform='rotateY('+x*7+'deg) rotateX('+-y*7+'deg)'});
+card.parentElement.addEventListener('pointerleave',()=>card.style.transform='');
+set(0,true);
+</script>
+</body>
+</html>

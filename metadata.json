@@ -1,0 +1,6 @@
+{
+  "name": "WAQAR INSTITUTE - Computer Institute ERP & Learning Portal",
+  "description": "Official Multi-Branch Computer Institute ERP, Student Learning Portal, Teacher Portal, Parent Portal, Admin Panel, and EduSync AI Tutor for WAQAR INSTITUTE.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
