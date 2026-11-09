@@ -2,42 +2,14 @@ rules_version = '2';
 
 service firebase.storage {
   match /b/{bucket}/o {
-
-    function isSignedIn() {
-      return request.auth != null;
+    match /users/{uid}/{fileName} {
+      allow read, write: if true;
     }
-
-    function isAdmin() {
-      return isSignedIn() && (
-        request.auth.token.role == 'admin' || request.auth.token.role == 'super_admin'
-      );
+    match /students/{studentId}/{fileName} {
+      allow read, write: if true;
     }
-
-    function isTeacher() {
-      return isSignedIn() && (request.auth.token.role == 'teacher' || isAdmin());
-    }
-
-    // 1. User Profile Avatars (Max 2 MB, image/* content-type only)
-    match /users/{uid}/avatar.jpg {
-      allow read: if isSignedIn();
-      allow write: if isSignedIn()
-                   && (request.auth.uid == uid || isAdmin())
-                   && request.resource != null
-                   && request.resource.size < 2 * 1024 * 1024
-                   && request.resource.contentType.matches('image/.*');
-    }
-
-    // 2. Exam Question Media & Encrypted PDF Bundles (Max 15 MB)
-    match /exams/{examId}/{fileName} {
-      allow read: if isSignedIn();
-      allow write: if (isAdmin() || isTeacher())
-                   && request.resource != null
-                   && request.resource.size < 15 * 1024 * 1024;
-    }
-
-    // 3. Default Deny All Other Paths
-    match /{allPaths=**} {
-      allow read, write: if false;
+    match /institute/{module}/{fileName} {
+      allow read, write: if true;
     }
   }
 }

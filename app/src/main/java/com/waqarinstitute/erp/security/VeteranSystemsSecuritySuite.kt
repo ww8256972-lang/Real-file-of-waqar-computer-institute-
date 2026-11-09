@@ -324,6 +324,14 @@ class TinkAeadVault(context: Context) {
     fun decrypt(ciphertext: ByteArray, associatedData: ByteArray): ByteArray {
         return aead.decrypt(ciphertext, associatedData)
     }
+
+    fun encryptEbookStreamChunk(plaintext: ByteArray, associatedDataTag: String): ByteArray {
+        return encrypt(plaintext, associatedDataTag.toByteArray(Charsets.UTF_8))
+    }
+
+    fun decryptEbookStreamChunk(ciphertext: ByteArray, associatedDataTag: String): ByteArray {
+        return decrypt(ciphertext, associatedDataTag.toByteArray(Charsets.UTF_8))
+    }
 }
 
 // =========================================================================================
@@ -331,7 +339,7 @@ class TinkAeadVault(context: Context) {
 // =========================================================================================
 class SqlCipherExamAttendanceVault(
     private val context: Context,
-    private val tinkAeadVault: TinkAeadVault
+    private val tinkAeadVault: TinkAeadVault = TinkAeadVault(context)
 ) {
     companion object {
         private const val PREF_FILE = "waqar_sqlcipher_key_store"
@@ -386,7 +394,7 @@ class SqlCipherExamAttendanceVault(
             .joinToString("") { "%02x".format(it) }
             .toCharArray()
         try {
-            val db = SQLiteDatabase.openOrCreateDatabase(dbFile, passphraseChars, null)
+            val db = SQLiteDatabase.openOrCreateDatabase(dbFile.absolutePath, passphraseChars, null)
             db.rawExecSQL("PRAGMA cipher_memory_security = ON;")
             db.rawExecSQL("PRAGMA journal_mode = WAL;")
             db.execSQL(

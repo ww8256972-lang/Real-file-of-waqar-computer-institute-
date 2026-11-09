@@ -33,6 +33,12 @@ class CustomKeystoreAppCheckProvider(
     private val functions: FirebaseFunctions = FirebaseFunctions.getInstance("asia-southeast1")
 ) : AppCheckProvider {
 
+    companion object {
+        fun install(context: Context, isDebugBuild: Boolean) {
+            WaqarAppCheckInstaller.installAppCheck(context, isDebugBuild)
+        }
+    }
+
     private val backgroundExecutor = Executors.newSingleThreadExecutor()
 
     override fun getToken(): Task<AppCheckToken> {

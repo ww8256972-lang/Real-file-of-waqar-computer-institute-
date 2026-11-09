@@ -22,8 +22,8 @@ android {
         applicationId = "com.waqarinstitute.erp"
         minSdk = 26
         targetSdk = 35
-        versionCode = 2
-        versionName = "2.0.0"
+        versionCode = 3
+        versionName = "3.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -40,6 +40,9 @@ android {
                 arguments += listOf("-DANDROID_STL=c++_shared")
             }
         }
+
+        buildConfigField("String", "AGORA_APP_ID", "\"waqar-agora-live-enterprise\"")
+        buildConfigField("String", "GEMINI_API_KEY", "\"\"")
     }
 
     externalNativeBuild {
@@ -147,15 +150,16 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.8")
     implementation("androidx.collection:collection-ktx:1.4.5")
 
-    // 2. Hardware Security, Google Tink 1.15.0, Conscrypt TLS 1.3, libsodium & Encrypted DataStore Vault
+    // 2. Enterprise Banking Security: EncryptedSharedPreferences, Google Play Integrity API, RootBeer, Tink & Conscrypt
     implementation("androidx.security:security-crypto:1.1.0-alpha06")
     implementation("androidx.datastore:datastore-preferences:1.1.1")
+    implementation("com.google.android.play:integrity:1.4.0")
+    implementation("com.scottyab:rootbeer-lib:0.1.0")
     implementation("com.google.crypto.tink:tink-android:1.15.0")
     implementation("org.conscrypt:conscrypt-android:2.5.3")
     implementation("com.github.joshjdevl.libsodiumjni:libsodium-jni-aar:2.0.2")
-    implementation("com.google.android.play:integrity:1.4.0")
 
-    // 3. Offline-First Room, SQLCipher 256-Bit Encrypted Database & Paging 3 (100k+ Records)
+    // 3. Offline-First Room + SQLCipher AES-256 Encrypted Database & Paging 3 (100k+ Records)
     val roomVersion = "2.6.1"
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
@@ -165,33 +169,45 @@ dependencies {
     implementation("androidx.paging:paging-runtime-ktx:3.3.2")
     implementation("androidx.paging:paging-compose:3.3.2")
 
-    // 4. Zero-Copy FlatBuffers, Protobuf / gRPC-Kotlin & Realm Exam Cache
+    // 4. Hardened Ktor HTTP Client with Hardware Cryptographic Pinning + OkHttp 4.12 + Retrofit 2.11
+    val ktorVersion = "2.3.12"
+    implementation("io.ktor:ktor-client-core:$ktorVersion")
+    implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
+    implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+
+    // 5. Zero-Copy FlatBuffers, Protobuf / gRPC-Kotlin & Realm Exam Cache
     implementation("com.google.flatbuffers:flatbuffers-java:24.3.25")
-    implementation("com.google.protobuf:protobuf-javalite:4.28.3")
-    implementation("com.google.protobuf:protobuf-kotlin-lite:4.28.3")
+    implementation("com.google.protobuf:protobuf-javalite:3.25.5")
+    implementation("com.google.protobuf:protobuf-kotlin-lite:3.25.5")
     implementation("io.grpc:grpc-okhttp:1.68.1")
     implementation("io.grpc:grpc-protobuf-lite:1.68.1")
     implementation("io.grpc:grpc-stub:1.68.1")
     implementation("io.grpc:grpc-kotlin-stub:1.4.1")
     implementation("io.realm.kotlin:library-base:2.0.0")
 
-    // 5. Koin Dependency Injection, AndroidX Startup, Perfetto Tracing, Baseline Profile
+    // 6. Koin DI, AndroidX Startup, Perfetto Tracing & AndroidX Baseline Profiles
     implementation("io.insert-koin:koin-android:3.5.6")
     implementation("io.insert-koin:koin-androidx-compose:3.5.6")
     implementation("androidx.startup:startup-runtime:1.2.0")
     implementation("androidx.tracing:tracing-ktx:1.2.0")
     implementation("androidx.profileinstaller:profileinstaller:1.4.1")
 
-    // 6. Chucker (Debug Inspector + Release No-Op) & LeakCanary (Debug Heap + Release Plumber)
-    debugImplementation("com.github.chuckerteam.chucker:library:4.0.0")
-    releaseImplementation("com.github.chuckerteam.chucker:library-no-op:4.0.0")
+    // 7. LeakCanary (Debug-Only via debugImplementation — auto-initializes via ContentProvider) & Chucker
     debugImplementation("com.squareup.leakcanary:leakcanary-android:2.14")
     implementation("com.squareup.leakcanary:plumber-android:2.14")
+    debugImplementation("com.github.chuckerteam.chucker:library:4.0.0")
+    releaseImplementation("com.github.chuckerteam.chucker:library-no-op:4.0.0")
 
-    // 7. WorkManager Background Synchronization
+    // 8. WorkManager Background Synchronization
     implementation("androidx.work:work-runtime-ktx:2.9.1")
 
-    // 8. CameraX, Google ML Kit Barcode Scanning, ZXing QR & Play Services Location
+    // 9. CameraX, Google ML Kit Barcode Scanning, ZXing QR & Play Services Location
     val cameraxVersion = "1.4.0"
     implementation("androidx.camera:camera-core:$cameraxVersion")
     implementation("androidx.camera:camera-camera2:$cameraxVersion")
@@ -201,15 +217,11 @@ dependencies {
     implementation("com.google.zxing:core:3.5.3")
     implementation("com.google.android.gms:play-services-location:21.3.0")
 
-    // 9. Networking (OkHttp 4.12 + Retrofit 2.11), Timber Logging & Coil Image Loader
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
-    implementation("com.squareup.retrofit2:retrofit:2.11.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+    // 10. Timber Logging & Coil Image Loader
     implementation("com.jakewharton.timber:timber:5.0.1")
     implementation("io.coil-kt:coil-compose:2.7.0")
 
-    // 10. Firebase Enterprise Suite (Auth, Firestore, Storage, Functions, AppCheck, Config)
+    // 11. Firebase Enterprise Suite (Auth, Firestore, Storage, Functions, AppCheck, Config)
     val firebaseBom = platform("com.google.firebase:firebase-bom:33.5.1")
     implementation(firebaseBom)
     implementation("com.google.firebase:firebase-auth-ktx")
@@ -222,7 +234,7 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.9.0")
 
-    // 11. Unit & Instrumented Testing Suite
+    // 12. Unit & Instrumented Testing Suite
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.robolectric:robolectric:4.13")
     testImplementation("androidx.test:core:1.6.1")
@@ -232,4 +244,5 @@ dependencies {
     testImplementation("io.insert-koin:koin-test:3.5.6")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+    androidTestImplementation("androidx.work:work-testing:2.9.1")
 }

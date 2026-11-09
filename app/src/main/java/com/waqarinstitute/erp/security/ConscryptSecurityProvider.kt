@@ -18,6 +18,9 @@ import javax.net.ssl.X509TrustManager
 object ConscryptSecurityProvider {
 
     @Synchronized
+    fun install(): Provider = installAsPrimaryProvider()
+
+    @Synchronized
     fun installAsPrimaryProvider(): Provider {
         val existing = Security.getProviders().firstOrNull { Conscrypt.isConscrypt(it) }
         if (existing != null) {

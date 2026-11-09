@@ -1,0 +1,25 @@
+# AndroidX Baseline Profile Rules for Waqar Computer Institute ERP (com.waqarinstitute.erp)
+# Pre-compiles critical startup, authentication, database encryption, and Compose rendering paths
+# to Ahead-Of-Time (AOT) machine code for zero-jank 120 FPS execution.
+
+HSPLcom/waqarinstitute/erp/WaqarApplication;-><init>()V
+HSPLcom/waqarinstitute/erp/WaqarApplication;->attachBaseContext(Landroid/content/Context;)V
+HSPLcom/waqarinstitute/erp/WaqarApplication;->onCreate()V
+HSPLcom/waqarinstitute/erp/MainActivity;-><init>()V
+HSPLcom/waqarinstitute/erp/MainActivity;->onCreate(Landroid/os/Bundle;)V
+HSPLcom/waqarinstitute/erp/security/PreStartBankingSecurityGuard;->runPreStartEnvironmentAudit(Landroid/content/Context;)Lcom/waqarinstitute/erp/security/PreStartSecurityReport;
+HSPLcom/waqarinstitute/erp/security/PreStartBankingSecurityGuard;->enforceWindowFlagSecure(Landroid/app/Activity;)V
+HSPLcom/waqarinstitute/erp/security/EncryptedBankingVault;-><init>(Landroid/content/Context;)V
+HSPLcom/waqarinstitute/erp/security/HardenedKtorPinnedClient;->create(Landroid/content/Context;)Lio/ktor/client/HttpClient;
+HSPLcom/waqarinstitute/erp/security/PlayIntegritySecurityVault;->requestIntegrityToken(JLjava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+HSPLcom/waqarinstitute/erp/data/local/WaqarDatabase;->getInstance(Landroid/content/Context;)Lcom/waqarinstitute/erp/data/local/WaqarDatabase;
+HSPLcom/waqarinstitute/erp/data/local/WaqarDatabase;->getEncryptedAttendanceDatabase(Landroid/content/Context;)Lnet/sqlcipher/database/SQLiteDatabase;
+HSPLcom/waqarinstitute/erp/data/WaqarFirebaseRepository;-><init>()V
+HSPLcom/waqarinstitute/erp/data/WaqarFirebaseRepository;->ensureDefaultAdminSyncedInCloud(Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+HSPLcom/waqarinstitute/erp/data/WaqarFirebaseRepository;->authenticateWithPortalRole(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+HSPLcom/waqarinstitute/erp/ui/Waqar3DGlassmorphicAuthComposeKt;->Waqar3DGlassmorphicAuthComposeScreen(Lcom/waqarinstitute/erp/data/WaqarFirebaseRepository;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;I)V
+HSPLcom/waqarinstitute/erp/ui/AdminErpComposeScreenKt;->AdminErpComposeScreen(Lcom/waqarinstitute/erp/data/UserProfile;Lcom/waqarinstitute/erp/data/WaqarFirebaseRepository;Lcom/waqarinstitute/erp/data/local/WaqarDatabase;Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/List;Lkotlin/jvm/functions/Function0;Landroidx/compose/runtime/Composer;I)V
+Landroidx/compose/runtime/**;
+Landroidx/compose/ui/**;
+Landroidx/compose/foundation/**;
+Landroidx/compose/material3/**;

@@ -55,10 +55,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -384,7 +384,7 @@ fun Waqar3DGlassmorphicAuthComposeScreen(
                         .clip(RoundedCornerShape(16.dp)),
                     shape = RoundedCornerShape(16.dp),
                     color = Color.White.copy(alpha = 0.12f),
-                    border = border(1.dp, Color.White.copy(alpha = 0.25f), RoundedCornerShape(16.dp)).shape
+                    border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.25f))
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.waqar_logo),
@@ -557,14 +557,15 @@ fun Waqar3DGlassmorphicAuthComposeScreen(
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(16.dp),
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                        colors = OutlinedTextFieldDefaults.colors(
                             focusedBorderColor = activeRole.colorA,
                             unfocusedBorderColor = Color.White.copy(alpha = 0.18f),
                             focusedLabelColor = activeRole.colorA,
                             unfocusedLabelColor = Color(0xFF8D97C2),
                             focusedTextColor = Color.White,
                             unfocusedTextColor = Color.White,
-                            containerColor = Color.Black.copy(alpha = 0.35f)
+                            focusedContainerColor = Color.Black.copy(alpha = 0.35f),
+                            unfocusedContainerColor = Color.Black.copy(alpha = 0.35f)
                         ),
                         keyboardOptions = KeyboardOptions(
                             imeAction = ImeAction.Next,
@@ -596,14 +597,15 @@ fun Waqar3DGlassmorphicAuthComposeScreen(
                         },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(16.dp),
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                        colors = OutlinedTextFieldDefaults.colors(
                             focusedBorderColor = activeRole.colorA,
                             unfocusedBorderColor = Color.White.copy(alpha = 0.18f),
                             focusedLabelColor = activeRole.colorA,
                             unfocusedLabelColor = Color(0xFF8D97C2),
                             focusedTextColor = Color.White,
                             unfocusedTextColor = Color.White,
-                            containerColor = Color.Black.copy(alpha = 0.35f)
+                            focusedContainerColor = Color.Black.copy(alpha = 0.35f),
+                            unfocusedContainerColor = Color.Black.copy(alpha = 0.35f)
                         ),
                         keyboardOptions = KeyboardOptions(
                             imeAction = ImeAction.Done,
@@ -682,19 +684,7 @@ fun Waqar3DGlassmorphicAuthComposeScreen(
                                         passwordInput = pass,
                                         selectedPortal = activeRole.key
                                     )
-                                    val verifiedUser = if (result.isSuccess) {
-                                        result.getOrThrow()
-                                    } else if (activeRole.key == "admin" && user.equals("waqar", ignoreCase = true) && pass.equals("waqar", ignoreCase = true)) {
-                                        UserProfile(
-                                            uid = "waqar",
-                                            username = "waqar",
-                                            displayName = "Waqar Ahmed (Director)",
-                                            role = "admin",
-                                            linkedEntityId = "WI-ADMIN-WAQAR"
-                                        )
-                                    } else {
-                                        result.getOrThrow()
-                                    }
+                                    val verifiedUser = result.getOrThrow()
                                     isAuthenticating = false
                                     onAuthenticated(verifiedUser)
                                 } catch (e: Exception) {

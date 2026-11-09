@@ -105,3 +105,18 @@ object RetrofitErpNetworkFactory {
             .create(WaqarErpHttpsApiService::class.java)
     }
 }
+
+typealias RetrofitErpApiService = WaqarErpHttpsApiService
+
+object RetrofitErpApiClient {
+    fun create(
+        baseOkHttpClient: OkHttpClient,
+        isDebug: Boolean = false
+    ): RetrofitErpApiService {
+        val client = baseOkHttpClient.newBuilder()
+            .addInterceptor(RetrofitErpNetworkFactory.createFirebaseAuthAndAppCheckInterceptor())
+            .addInterceptor(RetrofitErpNetworkFactory.createRedactedLoggingInterceptor(isDebug))
+            .build()
+        return RetrofitErpNetworkFactory.createRetrofitService(client)
+    }
+}

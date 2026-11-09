@@ -2,238 +2,132 @@
   "entities": {
     "UserProfile": {
       "title": "UserProfile",
-      "description": "Authenticated user account and role mapping for EduSync Academy / WAQAR INSTITUTE.",
+      "description": "Cloud-synced account profile for Admin, Teacher, Student, and Parent portals",
       "type": "object",
       "properties": {
-        "uid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
-        "email": { "type": "string", "maxLength": 120 },
-        "displayName": { "type": "string", "maxLength": 100 },
-        "username": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
-        "password": { "type": "string", "maxLength": 128 },
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "username": { "type": "string" },
         "role": { "type": "string", "enum": ["admin", "teacher", "student", "parent", "accountant", "receptionist"] },
-        "linkedEntityId": { "type": "string", "maxLength": 128 },
-        "branchId": { "type": "string", "maxLength": 128 },
+        "linkedEntityId": { "type": "string" },
+        "branchId": { "type": "string" },
         "status": { "type": "string", "enum": ["active", "pending", "suspended"] },
-        "createdAt": { "type": "string", "format": "date-time" },
-        "updatedAt": { "type": "string", "format": "date-time" }
+        "passwordSalt": { "type": "string" },
+        "passwordVerifierHash": { "type": "string" }
       },
-      "required": ["uid", "email", "displayName", "username", "role", "linkedEntityId", "branchId", "status", "createdAt", "updatedAt"]
+      "required": ["uid", "username", "role", "branchId", "status"]
     },
-    "AttendanceRecord": {
-      "title": "AttendanceRecord",
-      "description": "Server-verified attendance record written exclusively via Cloud Functions.",
+    "BranchDoc": {
+      "title": "BranchDoc",
+      "description": "Institute campus branch record",
       "type": "object",
       "properties": {
-        "studentId": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
-        "parentUid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
-        "teacherUid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
-        "batchId": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
-        "instituteId": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
-        "dateKey": { "type": "string", "maxLength": 16, "pattern": "^[0-9]{8}$" },
-        "status": { "type": "string", "enum": ["Present", "Absent", "Late"] },
-        "distanceMeters": { "type": "number" },
-        "verifiedAt": { "type": "string", "format": "date-time" }
+        "code": { "type": "string" },
+        "name": { "type": "string" },
+        "address": { "type": "string" },
+        "phone": { "type": "string" },
+        "email": { "type": "string" },
+        "managerName": { "type": "string" },
+        "status": { "type": "string" },
+        "ownerUid": { "type": "string" },
+        "visibility": { "type": "string" }
       },
-      "required": ["studentId", "batchId", "instituteId", "dateKey", "status", "distanceMeters", "verifiedAt"]
+      "required": ["code", "name", "status"]
     },
-    "ExamMetadata": {
-      "title": "ExamMetadata",
-      "description": "Online examination schedule and duration metadata.",
+    "CourseDoc": {
+      "title": "CourseDoc",
+      "description": "Academic computer course offering",
       "type": "object",
       "properties": {
-        "examId": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
-        "title": { "type": "string", "maxLength": 160 },
-        "courseId": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
-        "batchId": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
-        "teacherUid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
-        "durationMinutes": { "type": "number" },
-        "status": { "type": "string", "enum": ["draft", "published", "closed"] },
-        "createdAt": { "type": "string", "format": "date-time" },
-        "updatedAt": { "type": "string", "format": "date-time" }
-      },
-      "required": ["examId", "title", "courseId", "batchId", "teacherUid", "durationMinutes", "status", "createdAt", "updatedAt"]
-    },
-    "ExamQuestion": {
-      "title": "ExamQuestion",
-      "description": "Protected exam question and answer key blocked from direct student read.",
-      "type": "object",
-      "properties": {
-        "questionId": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
-        "prompt": { "type": "string", "maxLength": 1000 },
-        "optionA": { "type": "string", "maxLength": 300 },
-        "optionB": { "type": "string", "maxLength": 300 },
-        "optionC": { "type": "string", "maxLength": 300 },
-        "optionD": { "type": "string", "maxLength": 300 },
-        "correctOption": { "type": "string", "enum": ["A", "B", "C", "D"] },
-        "marks": { "type": "number" },
-        "authorUid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
-        "createdAt": { "type": "string", "format": "date-time" },
-        "updatedAt": { "type": "string", "format": "date-time" }
-      },
-      "required": ["questionId", "prompt", "optionA", "optionB", "optionC", "optionD", "correctOption", "marks", "authorUid", "createdAt", "updatedAt"]
-    },
-    "ExamResult": {
-      "title": "ExamResult",
-      "description": "Final published examination result written strictly by Cloud Functions.",
-      "type": "object",
-      "properties": {
-        "resultId": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
-        "examId": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
-        "studentId": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
-        "parentUid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
-        "score": { "type": "number" },
-        "totalMarks": { "type": "number" },
-        "percentage": { "type": "number" },
-        "grade": { "type": "string", "maxLength": 8 },
-        "isPublished": { "type": "boolean" },
-        "publishedAt": { "type": "string", "format": "date-time" }
-      },
-      "required": ["resultId", "examId", "studentId", "score", "totalMarks", "percentage", "grade", "isPublished", "publishedAt"]
-    },
-    "Branch": {
-      "title": "Branch",
-      "description": "Institute branch record.",
-      "type": "object",
-      "properties": {
-        "code": { "type": "string", "maxLength": 40, "pattern": "^[a-zA-Z0-9_\\-]+$" },
-        "name": { "type": "string", "maxLength": 120 },
-        "address": { "type": "string", "maxLength": 250 },
-        "phone": { "type": "string", "maxLength": 40 },
-        "email": { "type": "string", "maxLength": 120 },
-        "managerName": { "type": "string", "maxLength": 100 },
-        "status": { "type": "string", "enum": ["active", "inactive", "archived"] },
-        "ownerUid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
-        "visibility": { "type": "string", "enum": ["institute"] },
-        "createdAt": { "type": "string", "format": "date-time" },
-        "updatedAt": { "type": "string", "format": "date-time" }
-      },
-      "required": ["code", "name", "address", "phone", "email", "managerName", "status", "ownerUid", "visibility", "createdAt", "updatedAt"]
-    },
-    "Course": {
-      "title": "Course",
-      "description": "Academic computer course offered at the institute.",
-      "type": "object",
-      "properties": {
-        "code": { "type": "string", "maxLength": 40, "pattern": "^[a-zA-Z0-9_\\-]+$" },
-        "name": { "type": "string", "maxLength": 120 },
-        "category": { "type": "string", "maxLength": 80 },
-        "duration": { "type": "string", "maxLength": 60 },
+        "code": { "type": "string" },
+        "name": { "type": "string" },
+        "category": { "type": "string" },
+        "duration": { "type": "string" },
         "fee": { "type": "number" },
-        "syllabus": { "type": "string", "maxLength": 1000 },
-        "description": { "type": "string", "maxLength": 1000 },
-        "branchId": { "type": "string", "maxLength": 128 },
-        "status": { "type": "string", "enum": ["active", "inactive", "archived"] },
-        "ownerUid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
-        "visibility": { "type": "string", "enum": ["institute"] },
-        "createdAt": { "type": "string", "format": "date-time" },
-        "updatedAt": { "type": "string", "format": "date-time" }
+        "syllabus": { "type": "string" },
+        "description": { "type": "string" },
+        "branchId": { "type": "string" },
+        "status": { "type": "string" },
+        "ownerUid": { "type": "string" },
+        "visibility": { "type": "string" }
       },
-      "required": ["code", "name", "category", "duration", "fee", "syllabus", "description", "branchId", "status", "ownerUid", "visibility", "createdAt", "updatedAt"]
+      "required": ["code", "name", "fee"]
     },
-    "Batch": {
-      "title": "Batch",
-      "description": "Scheduled class batch for a specific course and branch.",
+    "BatchDoc": {
+      "title": "BatchDoc",
+      "description": "Classroom batch schedule and faculty assignment",
       "type": "object",
       "properties": {
-        "code": { "type": "string", "maxLength": 40, "pattern": "^[a-zA-Z0-9_\\-]+$" },
-        "name": { "type": "string", "maxLength": 120 },
-        "courseId": { "type": "string", "maxLength": 128 },
-        "courseName": { "type": "string", "maxLength": 120 },
-        "teacherId": { "type": "string", "maxLength": 128 },
-        "teacherName": { "type": "string", "maxLength": 100 },
-        "branchId": { "type": "string", "maxLength": 128 },
-        "timing": { "type": "string", "maxLength": 80 },
+        "code": { "type": "string" },
+        "name": { "type": "string" },
+        "courseId": { "type": "string" },
+        "courseName": { "type": "string" },
+        "teacherId": { "type": "string" },
+        "teacherName": { "type": "string" },
+        "branchId": { "type": "string" },
+        "timing": { "type": "string" },
         "capacity": { "type": "number" },
-        "startDate": { "type": "string", "maxLength": 40 },
-        "status": { "type": "string", "enum": ["active", "completed", "archived"] },
-        "ownerUid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
-        "visibility": { "type": "string", "enum": ["institute"] },
-        "createdAt": { "type": "string", "format": "date-time" },
-        "updatedAt": { "type": "string", "format": "date-time" }
+        "startDate": { "type": "string" },
+        "status": { "type": "string" },
+        "ownerUid": { "type": "string" },
+        "visibility": { "type": "string" }
       },
-      "required": ["code", "name", "courseId", "courseName", "teacherId", "teacherName", "branchId", "timing", "capacity", "startDate", "status", "ownerUid", "visibility", "createdAt", "updatedAt"]
+      "required": ["code", "name", "courseId"]
     },
-    "ErpRecord": {
-      "title": "ErpRecord",
-      "description": "Operational record across institute ERP modules.",
+    "ErpRecordDoc": {
+      "title": "ErpRecordDoc",
+      "description": "Unified ERP record for students, attendance, exams, results, fees, certificates, and notices",
       "type": "object",
       "properties": {
-        "module": {
-          "type": "string",
-          "enum": [
-            "student", "teacher", "parent", "admission", "attendance",
-            "exam", "exam_attempt", "result", "fee", "certificate",
-            "material", "assignment", "timetable", "library", "staff",
-            "notification", "message", "ticket", "event", "audit"
-          ]
-        },
-        "code": { "type": "string", "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
-        "title": { "type": "string", "maxLength": 160 },
-        "subtitle": { "type": "string", "maxLength": 200 },
-        "category": { "type": "string", "maxLength": 100 },
-        "status": { "type": "string", "maxLength": 40 },
-        "branchId": { "type": "string", "maxLength": 128 },
-        "courseId": { "type": "string", "maxLength": 128 },
-        "batchId": { "type": "string", "maxLength": 128 },
-        "targetUserId": { "type": "string", "maxLength": 128 },
+        "module": { "type": "string" },
+        "code": { "type": "string" },
+        "title": { "type": "string" },
+        "subtitle": { "type": "string" },
+        "category": { "type": "string" },
+        "status": { "type": "string" },
+        "branchId": { "type": "string" },
+        "courseId": { "type": "string" },
+        "batchId": { "type": "string" },
+        "targetUserId": { "type": "string" },
         "numericValue": { "type": "number" },
         "secondaryNumericValue": { "type": "number" },
-        "dateStr": { "type": "string", "maxLength": 60 },
-        "notes": { "type": "string", "maxLength": 2000 },
-        "extra1": { "type": "string", "maxLength": 500 },
-        "extra2": { "type": "string", "maxLength": 500 },
-        "extra3": { "type": "string", "maxLength": 500 },
-        "extra4": { "type": "string", "maxLength": 500 },
-        "ownerUid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
-        "visibility": { "type": "string", "enum": ["institute", "private"] },
-        "createdAt": { "type": "string", "format": "date-time" },
-        "updatedAt": { "type": "string", "format": "date-time" }
+        "dateStr": { "type": "string" },
+        "notes": { "type": "string" },
+        "extra1": { "type": "string" },
+        "extra2": { "type": "string" },
+        "extra3": { "type": "string" },
+        "extra4": { "type": "string" },
+        "ownerUid": { "type": "string" },
+        "visibility": { "type": "string" }
       },
-      "required": [
-        "module", "code", "title", "subtitle", "category", "status",
-        "branchId", "courseId", "batchId", "targetUserId",
-        "numericValue", "secondaryNumericValue", "dateStr", "notes",
-        "extra1", "extra2", "extra3", "extra4",
-        "ownerUid", "visibility", "createdAt", "updatedAt"
-      ]
+      "required": ["module", "code", "title"]
     }
   },
   "firestore": {
+    "/admins/{adminId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Cloud-synced Administrator credentials and profile"
+    },
     "/users/{userId}": {
       "schema": { "$ref": "#/entities/UserProfile" },
-      "description": "Strict PII-isolated user profile and RBAC mapping."
-    },
-    "/attendance/{recordId}": {
-      "schema": { "$ref": "#/entities/AttendanceRecord" },
-      "description": "Server-only attendance collection (client writes strictly blocked)."
-    },
-    "/exams/{examId}": {
-      "schema": { "$ref": "#/entities/ExamMetadata" },
-      "description": "Examination metadata managed by Admins and Teachers."
-    },
-    "/exams/{examId}/questions/{questionId}": {
-      "schema": { "$ref": "#/entities/ExamQuestion" },
-      "description": "Protected exam question bank strictly inaccessible to students."
-    },
-    "/results/{resultId}": {
-      "schema": { "$ref": "#/entities/ExamResult" },
-      "description": "Published exam results (read-only for owner student/parent, write-only via Cloud Functions)."
+      "description": "Cloud-synced user profiles for Admin, Teacher, Student, and Parent"
     },
     "/branches/{branchId}": {
-      "schema": { "$ref": "#/entities/Branch" },
-      "description": "Multi-branch records."
+      "schema": { "$ref": "#/entities/BranchDoc" },
+      "description": "Institute branches"
     },
     "/courses/{courseId}": {
-      "schema": { "$ref": "#/entities/Course" },
-      "description": "Courses catalog and fee configuration."
+      "schema": { "$ref": "#/entities/CourseDoc" },
+      "description": "Institute courses"
     },
     "/batches/{batchId}": {
-      "schema": { "$ref": "#/entities/Batch" },
-      "description": "Active and historical class batches."
+      "schema": { "$ref": "#/entities/BatchDoc" },
+      "description": "Institute batches"
     },
     "/erpRecords/{recordId}": {
-      "schema": { "$ref": "#/entities/ErpRecord" },
-      "description": "All institute operational module records."
+      "schema": { "$ref": "#/entities/ErpRecordDoc" },
+      "description": "All 19 ERP module records"
     }
   }
 }

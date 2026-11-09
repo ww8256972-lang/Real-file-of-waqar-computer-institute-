@@ -862,7 +862,6 @@ class ZeroDiskMemoryPdfEngine(context: Context) {
         NativeLibrary.ensureLoaded()
     }
 
-    @JvmStatic
     private external fun nativeCreateMemfdWithBytes(name: String, pdfBytes: ByteArray): Int
 
     private val bitmapCache: LruCache<Int, Bitmap>

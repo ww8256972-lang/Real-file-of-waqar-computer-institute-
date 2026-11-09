@@ -27,11 +27,12 @@ export interface UserProfileDoc {
   email: string;
   displayName: string;
   username: string;
-  password?: string;
   role: UserRole;
   linkedEntityId: string;
   branchId: string;
   status: 'active' | 'pending' | 'suspended';
+  passwordSalt?: string;
+  passwordVerifierHash?: string;
   createdAt?: unknown;
   updatedAt?: unknown;
 }
@@ -113,11 +114,10 @@ export interface ErpRecordDoc {
   updatedAt?: unknown;
 }
 
-// Validation constants synchronized verbatim with firebase-blueprint.json & firestore.rules
 export const ID_REGEX = /^[a-zA-Z0-9_\-]+$/;
 
 export function sanitizeId(input: string, maxLen = 64): string {
-  const cleaned = input.trim().replace(/[^a-zA-Z0-9_\-]/g, '-').slice(0, maxLen);
+  const cleaned = (input ?? '').trim().replace(/[^a-zA-Z0-9_\-]/g, '-').slice(0, maxLen);
   return cleaned.length > 0 ? cleaned : `WI-${Date.now()}`;
 }
 
@@ -133,4 +133,27 @@ export function calculateGrade(percentage: number): { grade: string; passed: boo
   if (percentage >= 60) return { grade: 'B', passed: true };
   if (percentage >= 40) return { grade: 'C', passed: true };
   return { grade: 'F', passed: false };
+}
+
+/**
+ * Generates a 16-byte hex salt using Web Crypto API.
+ */
+export function generateSaltHex(byteLen = 16): string {
+  const bytes = new Uint8Array(byteLen);
+  crypto.getRandomValues(bytes);
+  return Array.from(bytes)
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
+}
+
+/**
+ * Computes salted SHA-256 hex digest matching Android Kotlin `computeSaltedSha256Verifier(password, saltHex)`.
+ */
+export async function computeSaltedSha256Hex(password: string, saltHex: string): Promise<string> {
+  const input = `${saltHex}:${password.trim()}`;
+  const encoded = new TextEncoder().encode(input);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', encoded);
+  return Array.from(new Uint8Array(hashBuffer))
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
 }

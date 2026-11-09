@@ -11,12 +11,10 @@ extern "C" {
 
 typedef struct JSRuntime JSRuntime;
 typedef struct JSContext JSContext;
-typedef struct JSValueConst {
-    uint64_t u;
-} JSValueConst;
 typedef struct JSValue {
     uint64_t u;
 } JSValue;
+typedef JSValue JSValueConst;
 
 #define JS_EVAL_TYPE_GLOBAL   (0 << 0)
 #define JS_EVAL_TYPE_MODULE   (1 << 0)

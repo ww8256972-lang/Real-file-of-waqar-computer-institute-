@@ -416,6 +416,13 @@ class DeviceFingerprintManager(private val context: Context) {
         init {
             NativeLibrary.ensureLoaded()
         }
+
+        fun deriveHardwareDeviceBindingTag(context: Context, serverChallenge: ByteArray): String {
+            val challengeStr = Base64.encodeToString(serverChallenge, Base64.NO_WRAP)
+            return DeviceFingerprintManager(context.applicationContext)
+                .generateDeviceFingerprint(challengeStr)
+                .deviceFingerprintSha512Hex
+        }
     }
 
     external fun nativeDeriveDeviceFingerprintSha512Hex(challengeAndCertDigest: String): String

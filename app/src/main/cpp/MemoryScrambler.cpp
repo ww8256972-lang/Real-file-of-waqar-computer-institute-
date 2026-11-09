@@ -5,6 +5,7 @@
 #include <time.h>
 #include <pthread.h>
 #include <sys/random.h>
+#include <sys/syscall.h>
 #include <sys/mman.h>
 #include <unistd.h>
 #include <android/log.h>
@@ -37,7 +38,7 @@ static uint64_t current_monotonic_ms() noexcept {
 
 static uint64_t draw_hardware_prng_u64() noexcept {
     uint64_t val = 0;
-    if (getrandom(&val, sizeof(val), 0) != sizeof(val)) {
+    if (syscall(SYS_getrandom, &val, sizeof(val), 0) != static_cast<long>(sizeof(val))) {
         struct timespec ts;
         clock_gettime(CLOCK_MONOTONIC, &ts);
         val = (static_cast<uint64_t>(ts.tv_nsec) * 0x9E3779B97F4A7C15ULL) ^
@@ -149,8 +150,9 @@ static jbyteArray unscramble_slot_internal(JNIEnv* env, jint slotHandle) {
             memcpy(tempPlain, slot->ciphertextBuffer, len);
             xor_buffer_with_key64(tempPlain, len, slot->activeXorKey64);
             env->SetByteArrayRegion(outArray, 0, static_cast<jsize>(len), reinterpret_cast<const jbyte*>(tempPlain));
-            for (volatile size_t k = 0; k < len; ++k) {
-                tempPlain[k] = 0;
+            volatile uint8_t* wipePtr = tempPlain;
+            for (size_t k = 0; k < len; ++k) {
+                wipePtr[k] = 0;
             }
             free(tempPlain);
         }

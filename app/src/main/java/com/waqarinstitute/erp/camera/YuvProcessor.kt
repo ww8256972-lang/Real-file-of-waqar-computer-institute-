@@ -111,4 +111,39 @@ object YuvProcessor {
             usedNativeSimd = NativeLibrary.isLoaded
         )
     }
+
+    fun convertYuv420ToNv21(
+        yBuffer: ByteBuffer,
+        uBuffer: ByteBuffer,
+        vBuffer: ByteBuffer,
+        yRowStride: Int,
+        uvRowStride: Int,
+        uvPixelStride: Int,
+        width: Int,
+        height: Int,
+        outNv21: ByteArray
+    ) {
+        var pos = 0
+        val yDup = yBuffer.duplicate()
+        for (row in 0 until height) {
+            yDup.position(row * yRowStride)
+            yDup.get(outNv21, pos, width)
+            pos += width
+        }
+
+        val uDup = uBuffer.duplicate()
+        val vDup = vBuffer.duplicate()
+        val uvHeight = height / 2
+        val uvWidth = width / 2
+        for (row in 0 until uvHeight) {
+            val rowOffset = row * uvRowStride
+            for (col in 0 until uvWidth) {
+                val uvIdx = rowOffset + col * uvPixelStride
+                if (pos + 1 < outNv21.size && uvIdx < vDup.limit() && uvIdx < uDup.limit()) {
+                    outNv21[pos++] = vDup.get(uvIdx)
+                    outNv21[pos++] = uDup.get(uvIdx)
+                }
+            }
+        }
+    }
 }

@@ -881,6 +881,10 @@ fun DisposableExamLeakGuardEffect(
 object PerfettoFrameBudgetTracer {
     private const val TARGET_FRAME_BUDGET_NANOS = 16_666_666L // 60Hz baseline (8.33ms on 120Hz panels)
 
+    inline fun <T> traceSection(sectionName: String, crossinline block: () -> T): T {
+        return traceCriticalSection(sectionName, block)
+    }
+
     inline fun <T> traceCriticalSection(sectionName: String, crossinline block: () -> T): T {
         return trace(sectionName) {
             block()

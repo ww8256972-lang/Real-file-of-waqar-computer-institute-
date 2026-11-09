@@ -11,4 +11,6 @@
     <string name="native_security_error">Critical Security Module Failed to Load: Exams and Attendance are blocked on this device.</string>
     <string name="camera_permission_rationale">Camera access is required to scan the instructor\'s rotating QR code for verified classroom attendance.</string>
     <string name="location_permission_rationale">High-accuracy GPS location is required to verify you are inside the institute campus geofence during attendance.</string>
+    <string name="open_settings_button">Grant Permissions / Open Settings</string>
+    <string name="torch_toggle_label">Flashlight</string>
 </resources>

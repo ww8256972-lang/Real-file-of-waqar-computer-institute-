@@ -80,6 +80,8 @@ import com.waqarinstitute.erp.security.DeviceFingerprintManager
 import com.waqarinstitute.erp.security.HardwareSecurityModuleVault
 import com.waqarinstitute.erp.security.NativeCrashHarvester
 import com.waqarinstitute.erp.security.PerfettoFrameBudgetTracer
+import com.waqarinstitute.erp.security.PlayIntegritySecurityVault
+import com.waqarinstitute.erp.security.PreStartBankingSecurityGuard
 import com.waqarinstitute.erp.security.TamperZeroizationManager
 import com.waqarinstitute.erp.ui.AdminErpComposeScreen
 import com.waqarinstitute.erp.ui.ParentRoleComposePortal
@@ -96,14 +98,20 @@ import java.security.SecureRandom
  */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Block screenshots, screen recording, and task-switcher snapshots across all screens
+        PreStartBankingSecurityGuard.enforceWindowFlagSecure(this)
         super.onCreate(savedInstanceState)
 
         val database = WaqarDatabase.getDatabase(applicationContext)
         val repository = WaqarFirebaseRepository()
 
-        // 1. Initialize Native Crash Harvester, Anti-Tamper Watchdog & Baseline Profile Warmup
+        // 1. Execute Pre-Start Frida, Debugger, Cloned App, RootBeer & Baseline Profile checks
         PerfettoFrameBudgetTracer.traceSection("MainActivity.SecurityBootstrap") {
             runCatching {
+                PreStartBankingSecurityGuard.runPreStartEnvironmentAudit(
+                    context = applicationContext,
+                    isDebugBuild = BuildConfig.DEBUG
+                )
                 NativeCrashHarvester.initialize(applicationContext)
                 TamperZeroizationManager.startKernelAntiTamperWatchdog(applicationContext)
                 BaselineProfileInitializer.warmUpAheadOfTimeCompilation(applicationContext)
@@ -111,9 +119,12 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        // 2. Generate Hardware Keystore / StrongBox Attestation Statement using a fresh challenge nonce
+        // 2. Request Play Integrity API Attestation, Hardware StrongBox Attestation & Cloud Admin Bootstrap
         lifecycleScope.launch {
             runCatching {
+                repository.ensureDefaultAdminSyncedInCloud()
+                PlayIntegritySecurityVault.getInstance(applicationContext)
+                    .requestIntegrityToken(actionPayload = "MainActivity.Bootstrap")
                 val challengeNonce = ByteArray(32).also { SecureRandom().nextBytes(it) }
                 HardwareSecurityModuleVault().generateAttestedKeyAndSignChallenge(challengeNonce)
                 DeviceFingerprintManager.deriveHardwareDeviceBindingTag(

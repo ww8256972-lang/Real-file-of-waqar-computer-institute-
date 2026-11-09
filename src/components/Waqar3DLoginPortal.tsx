@@ -9,11 +9,7 @@ interface Waqar3DLoginPortalProps {
     password: string,
     selectedPortal?: PortalRole
   ) => Promise<void>;
-  onResetPasswordWithDob?: (
-    username: string,
-    dobInput: string,
-    newPassword: string
-  ) => Promise<void>;
+  onSendPasswordResetEmail?: (usernameOrEmail: string) => Promise<string>;
   authLoading: boolean;
   authError: string | null;
 }
@@ -83,21 +79,21 @@ const ROLES: RoleConfig[] = [
     subtitle: 'Track student attendance, monthly tests, fee dues & report cards.',
     userLabel: 'Registered Mobile / ID',
     placeholder: 'Enter Registered Mobile / ID',
-    iconPath: '<circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 15c2.5 0 4 1.7 4 4"/>',
+    iconPath:
+      '<circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 15c2.5 0 4 1.7 4 4"/>',
   },
 ];
 
 export const Waqar3DLoginPortal: React.FC<Waqar3DLoginPortalProps> = ({
   onAuthenticateWithCredentials,
-  onResetPasswordWithDob,
+  onSendPasswordResetEmail,
   authLoading,
   authError,
 }) => {
-  // Roles default to Student (index 1) or Admin (index 0)
   const [currentIdx, setCurrentIdx] = useState<number>(0);
   const currentRole = ROLES[currentIdx];
 
-  // INPUTS MUST START 100% EMPTY - NO PREFILLED DEMO VALUES!
+  // INPUTS ALWAYS START EMPTY (NO DEMO PREFILL)
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -106,8 +102,6 @@ export const Waqar3DLoginPortal: React.FC<Waqar3DLoginPortalProps> = ({
   const [localMsg, setLocalMsg] = useState<{ text: string; isError: boolean } | null>(null);
   const [showForgotModal, setShowForgotModal] = useState<boolean>(false);
   const [forgotUser, setForgotUser] = useState<string>('');
-  const [forgotDob, setForgotDob] = useState<string>('');
-  const [forgotNewPass, setForgotNewPass] = useState<string>('');
   const [forgotMsg, setForgotMsg] = useState<string>('');
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -118,7 +112,6 @@ export const Waqar3DLoginPortal: React.FC<Waqar3DLoginPortalProps> = ({
     b: new THREE.Color(ROLES[0].b),
   });
 
-  // Switch Role: Keeps fields clean and empty
   const handleSelectRole = (idx: number) => {
     setCurrentIdx(idx);
     const r = ROLES[idx];
@@ -134,7 +127,6 @@ export const Waqar3DLoginPortal: React.FC<Waqar3DLoginPortalProps> = ({
     }
   };
 
-  // Form Submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLocalMsg(null);
@@ -174,20 +166,18 @@ export const Waqar3DLoginPortal: React.FC<Waqar3DLoginPortalProps> = ({
     );
   };
 
-  // Handle Forgot Password
   const handleResetSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!onResetPasswordWithDob) return;
+    if (!onSendPasswordResetEmail) return;
     try {
-      await onResetPasswordWithDob(forgotUser, forgotDob, forgotNewPass);
-      setForgotMsg('Password successfully reset! You can now log in.');
-      setTimeout(() => setShowForgotModal(false), 2000);
+      const msg = await onSendPasswordResetEmail(forgotUser);
+      setForgotMsg(msg);
+      setTimeout(() => setShowForgotModal(false), 2400);
     } catch (err: unknown) {
-      setForgotMsg(err instanceof Error ? err.message : 'Reset failed. Verify details.');
+      setForgotMsg(err instanceof Error ? err.message : 'Password reset request failed.');
     }
   };
 
-  // Three.js Particle Wave Setup
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -196,9 +186,14 @@ export const Waqar3DLoginPortal: React.FC<Waqar3DLoginPortalProps> = ({
     let renderer: THREE.WebGLRenderer;
     let scene: THREE.Scene;
     let cam: THREE.PerspectiveCamera;
-    let clock = new THREE.Clock();
-    let mx = 0, my = 0, mxs = 0, mys = 0;
-    let pulseT = -1, boost = 0, mouseP = 0;
+    const clock = new THREE.Clock();
+    let mx = 0,
+      my = 0,
+      mxs = 0,
+      mys = 0;
+    let pulseT = -1,
+      boost = 0,
+      mouseP = 0;
 
     const mob = window.innerWidth < 700;
     const N = mob ? 90 : 150;
@@ -288,69 +283,64 @@ export const Waqar3DLoginPortal: React.FC<Waqar3DLoginPortalProps> = ({
 
       const pl = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
       const rc = new THREE.Raycaster();
-      const v2 = new THREE.Vector2();
+      const ndc = new THREE.Vector2();
       const hit = new THREE.Vector3();
 
-      const handleResize = () => {
-        if (!canvas) return;
-        const w = canvas.clientWidth || window.innerWidth;
-        const h = canvas.clientHeight || window.innerHeight;
+      pulseTriggerRef.current = (s = 1) => {
+        pulseT = 0;
+        boost = 0.7 * s;
+      };
+
+      const fit = () => {
+        const w = window.innerWidth;
+        const h = window.innerHeight;
         renderer.setSize(w, h, false);
         cam.aspect = w / h;
-        cam.position.z = w / h < 0.8 ? 30 : 24;
+        const p = h > w;
+        cam.fov = p ? 68 : 56;
+        cam.position.set(0, p ? 16 : 13, p ? 28 : 24);
         cam.updateProjectionMatrix();
+        U.uSize.value = renderer.getPixelRatio() * (w < 600 ? 1.15 : 1);
       };
-      handleResize();
-      window.addEventListener('resize', handleResize);
+      fit();
+      window.addEventListener('resize', fit);
 
       const handlePointerMove = (e: PointerEvent) => {
-        const rect = canvas.getBoundingClientRect();
-        mx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-        my = ((e.clientY - rect.top) / rect.height) * 2 - 1;
-        v2.set(mx, -my);
-        rc.setFromCamera(v2, cam);
+        mx = (e.clientX / window.innerWidth) * 2 - 1;
+        my = -(e.clientY / window.innerHeight) * 2 + 1;
+        ndc.set(mx, my);
+        rc.setFromCamera(ndc, cam);
         if (rc.ray.intersectPlane(pl, hit)) {
           U.uMouse.value.set(hit.x, hit.z);
-          mouseP = 1;
         }
+        mouseP = 1;
       };
-      window.addEventListener('pointermove', handlePointerMove);
-
-      pulseTriggerRef.current = (s: number) => {
-        pulseT = 0;
-        boost = Math.max(boost, s > 1 ? 1.6 : 0);
-      };
-
-      const calm = window.matchMedia('(prefers-reduced-motion:reduce)').matches ? 0.25 : 1;
+      window.addEventListener('pointermove', handlePointerMove, { passive: true });
 
       const loop = () => {
         animationFrameId = requestAnimationFrame(loop);
         const dt = Math.min(clock.getDelta(), 0.05);
-        U.uTime.value += dt * calm;
+        U.uTime.value += dt * (1 + boost * 1.4);
+        boost = Math.max(0, boost - dt * 1.1);
+        mouseP = Math.max(0, mouseP - dt * 0.5);
+        U.uMouseP.value += (mouseP - U.uMouseP.value) * 0.1;
+        U.uAmp.value = 1 + boost * 0.8;
 
-        mxs += (mx - mxs) * 0.04;
-        mys += (my - mys) * 0.04;
-        cam.position.x = mxs * 5;
-        cam.position.y = 11 + mys * -2.5;
-        cam.lookAt(0, 1, -14);
+        if (pulseT >= 0) {
+          pulseT += dt * 42;
+          U.uRing.value = pulseT;
+          U.uRingA.value = Math.max(0, 1 - pulseT / 75);
+          if (pulseT > 75) pulseT = -1;
+        }
 
         U.uC.value.lerp(targetColorsRef.current.a, 0.06);
         U.uC2.value.lerp(targetColorsRef.current.b, 0.06);
 
-        mouseP += (0 - mouseP) * 0.012;
-        U.uMouseP.value = mouseP;
-
-        if (pulseT >= 0) {
-          pulseT += dt / 1.5;
-          U.uRing.value = pulseT * 95;
-          U.uRingA.value = Math.max(0, 1 - pulseT) * (1 + boost);
-          if (pulseT > 1) {
-            pulseT = -1;
-            U.uRingA.value = 0;
-          }
-        }
-        U.uAmp.value += (1 + boost * 0.6 - U.uAmp.value) * 0.06;
-        boost *= 0.985;
+        mxs += (mx - mxs) * 0.05;
+        mys += (my - mys) * 0.05;
+        cam.position.x = mxs * 3.5;
+        cam.position.y = (window.innerHeight > window.innerWidth ? 16 : 13) + mys * 1.6;
+        cam.lookAt(0, -2, -14);
 
         renderer.render(scene, cam);
       };
@@ -358,344 +348,294 @@ export const Waqar3DLoginPortal: React.FC<Waqar3DLoginPortalProps> = ({
 
       return () => {
         cancelAnimationFrame(animationFrameId);
-        window.removeEventListener('resize', handleResize);
+        window.removeEventListener('resize', fit);
         window.removeEventListener('pointermove', handlePointerMove);
+        g.dispose();
+        m.dispose();
         renderer.dispose();
       };
     } catch {
-      // Fallback takes over
+      return;
     }
   }, []);
 
-  // 3D Card Tilt
-  const handleCardMouseMove = (e: React.MouseEvent) => {
-    if (!cardRef.current) return;
+  const handleCardPointerMove = (e: React.MouseEvent<HTMLFormElement>) => {
     const nativeEvt = e.nativeEvent as unknown as { pointerType?: string };
-    if (nativeEvt.pointerType === 'touch') return;
+    if (nativeEvt.pointerType === 'touch' || !cardRef.current) return;
     const b = cardRef.current.getBoundingClientRect();
     const x = (e.clientX - b.left) / b.width - 0.5;
     const y = (e.clientY - b.top) / b.height - 0.5;
-    cardRef.current.style.transform = `rotateY(${x * 7}deg) rotateX(${-y * 7}deg)`;
+    cardRef.current.style.transform = `perspective(1000px) rotateY(${x * 8}deg) rotateX(${-y * 8}deg)`;
+    cardRef.current.style.setProperty('--mx', `${(x + 0.5) * 100}%`);
+    cardRef.current.style.setProperty('--my', `${(y + 0.5) * 100}%`);
   };
 
-  const handleCardMouseLeave = () => {
-    if (cardRef.current) {
-      cardRef.current.style.transform = '';
-    }
+  const handleCardPointerLeave = () => {
+    if (!cardRef.current) return;
+    cardRef.current.style.transform = '';
   };
 
   return (
     <div
-      className="waqar-3d-portal-container relative min-h-full w-full bg-[#05060f] text-[#eef1ff] overflow-x-hidden font-sans select-none flex flex-col justify-between"
+      className="relative min-h-screen w-full overflow-x-hidden flex flex-col justify-between bg-[#05060f] text-[#f3f6ff] select-none"
       style={
         {
           '--a': currentRole.a,
           '--b': currentRole.b,
-          '--text': '#eef1ff',
-          '--muted': '#8d97c2',
-          '--line': 'rgba(255,255,255,.12)',
-          '--glass': 'rgba(14,18,42,.62)',
         } as React.CSSProperties
       }
     >
-      <style>{`
-        @property --ang { syntax: "<angle>"; initial-value: 0deg; inherits: false; }
-        @keyframes spinConic { to { --ang: 360deg; } }
-        @keyframes shimmerBtn { to { transform: translateX(120%); } }
-        @keyframes rotateSpinner { to { transform: rotate(360deg); } }
-        @keyframes fadeInCard {
-          from { opacity: 0; transform: translateY(30px) rotateX(15deg) scale(.97); }
-          to { opacity: 1; transform: translateY(0) rotateX(0deg) scale(1); }
-        }
+      <canvas ref={canvasRef} className="fixed inset-0 w-full h-full z-0 pointer-events-none" />
 
-        .portal-card-element {
-          animation: fadeInCard 0.9s cubic-bezier(.2,.9,.2,1) both;
-        }
-
-        .portal-card-element::before {
-          content: "";
-          position: absolute;
-          inset: -1.5px;
-          border-radius: 29px;
-          padding: 1.5px;
-          background: conic-gradient(from var(--ang), transparent 0 60%, var(--a), var(--b), transparent);
-          -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-          -webkit-mask-composite: xor;
-          mask-composite: exclude;
-          animation: spinConic 5s linear infinite;
-          pointer-events: none;
-        }
-
-        .go-button-shimmer::after {
-          content: "";
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,.55) 50%, transparent 70%);
-          transform: translateX(-120%);
-          animation: shimmerBtn 3.2s infinite;
-        }
-
-        .spinner-icon {
-          display: inline-block;
-          width: 16px;
-          height: 16px;
-          border: 2.5px solid #05060f;
-          border-top-color: transparent;
-          border-radius: 50%;
-          animation: rotateSpinner .7s linear infinite;
-          vertical-align: -3px;
-          margin-right: 8px;
-        }
-      `}</style>
-
-      {/* Radial Gradient Fallback */}
       <div
-        className="absolute inset-0 pointer-events-none z-0"
+        className="fixed inset-0 z-10 pointer-events-none"
         style={{
-          background: `radial-gradient(700px 500px at 50% 80%, color-mix(in srgb, ${currentRole.a} 35%, transparent), transparent), #05060f`,
+          background:
+            'radial-gradient(circle at 50% 12%, rgba(80,120,255,.12), transparent 55%), radial-gradient(circle at 50% 100%, rgba(5,6,15,.92) 10%, rgba(5,6,15,.25) 65%, rgba(5,6,15,.85) 100%)',
         }}
       />
 
-      {/* Three.js Canvas */}
-      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full block z-0 pointer-events-none" />
-
-      {/* Vignette Overlay */}
-      <div
-        className="absolute inset-0 pointer-events-none z-0"
-        style={{
-          background: 'radial-gradient(ellipse at center, transparent 35%, rgba(5,6,15,.85))',
-        }}
-      />
-
-      {/* Top Header: Official Waqar Computer Institute Logo & Title */}
-      <header className="relative z-20 pt-4 px-4 flex items-center justify-between">
-        <div className="flex items-center gap-3 font-extrabold tracking-wide">
-          <div className="relative w-11 h-11 rounded-2xl p-1 bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-lg shadow-black/40">
+      {/* Top Header Branding — Waqar Computer Institute */}
+      <header className="relative z-20 flex items-center justify-between px-4 sm:px-7 pt-4 pb-2">
+        <div className="flex items-center gap-3">
+          <div
+            className="w-11 h-11 rounded-xl bg-white p-1.5 flex items-center justify-center shadow-lg border border-white/25"
+            style={{
+              boxShadow: `0 0 24px -4px ${currentRole.a}`,
+            }}
+          >
             <img
-              src="/waqar-logo.png"
+              src="/waqar_logo.png"
               alt="Waqar Computer Institute Logo"
               className="w-full h-full object-contain"
             />
           </div>
           <div>
-            <div className="text-white text-sm md:text-base font-extrabold tracking-tight flex items-center gap-1.5">
-              <span>WAQAR</span>
-              <span
-                className="bg-clip-text text-transparent font-black"
-                style={{
-                  backgroundImage: `linear-gradient(90deg, ${currentRole.a}, ${currentRole.b})`,
-                }}
-              >
-                COMPUTER INSTITUTE
-              </span>
-            </div>
-            <small className="block text-[10px] font-semibold tracking-widest text-[#8d97c2]">
-              GOVT. REGD. IT & SKILL ACADEMY
+            <h2 className="text-sm sm:text-base font-extrabold tracking-tight leading-tight text-white">
+              Waqar Computer Institute
+            </h2>
+            <small className="block text-[10px] text-[#8d97c2] tracking-[1.6px] uppercase font-semibold">
+              INSTITUTE ERP PORTAL
             </small>
           </div>
         </div>
 
-        <div className="hidden sm:flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/30 px-2.5 py-1 rounded-full text-[10px] text-emerald-400 font-semibold tracking-wide">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          <span>PORTAL ACTIVE</span>
+        <div className="flex items-center gap-2 text-xs text-[#8d97c2] px-3 py-1.5 rounded-full bg-white/5 border border-white/15 backdrop-blur-md">
+          <span
+            className="w-2 h-2 rounded-full bg-[#2dff9b] animate-pulse"
+            style={{ boxShadow: '0 0 10px #2dff9b' }}
+          />
+          <span>Cloud Live</span>
         </div>
       </header>
 
-      {/* Centered Main Form Card Container */}
-      <main className="relative z-10 flex-1 grid place-items-center px-3.5 py-6">
-        <div
-          className="w-full max-w-[420px]"
-          style={{ perspective: '1100px' }}
-          onMouseMove={handleCardMouseMove}
-          onMouseLeave={handleCardMouseLeave}
-        >
+      {/* Main Centered Glassmorphic Card */}
+      <main className="relative z-20 flex-1 flex items-center justify-center px-4 py-3">
+        <div className="w-full max-w-[460px]">
           <form
             ref={cardRef}
             onSubmit={handleSubmit}
+            onMouseMove={handleCardPointerMove}
+            onMouseLeave={handleCardPointerLeave}
             autoComplete="off"
-            className="portal-card-element relative p-5 md:p-6 rounded-[28px] border border-white/10 backdrop-blur-[22px] transition-transform duration-200 ease-out"
+            className="relative rounded-[26px] p-5 sm:p-7 backdrop-blur-2xl border border-white/15 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.85)] transition-transform duration-150 overflow-hidden"
             style={{
-              background: 'rgba(14,18,42,.65)',
-              boxShadow: `0 0 0 1px rgba(255,255,255,.04) inset, 0 40px 80px -30px #000, 0 0 90px -30px ${currentRole.a}`,
+              background: 'rgba(12, 15, 32, 0.66)',
             }}
           >
-            {/* 4-Role Switcher Tabs */}
-            <div className="relative grid grid-cols-4 p-1 rounded-[18px] bg-black/40 border border-white/10" role="tablist">
-              <div
-                className="absolute top-1 bottom-1 left-1 rounded-[13px] transition-transform duration-500 ease-[cubic-bezier(.5,1.5,.5,1)]"
-                style={{
-                  width: 'calc(25% - 2px)',
-                  transform: `translateX(${currentIdx * 100}%)`,
-                  background: `linear-gradient(135deg, color-mix(in srgb, ${currentRole.a} 85%, #000), color-mix(in srgb, ${currentRole.b} 85%, #000))`,
-                  boxShadow: `0 0 22px -2px ${currentRole.a}`,
-                }}
-              />
-
-              {ROLES.map((r, idx) => {
-                const isSelected = idx === currentIdx;
+            {/* Top Role Switcher Pills (Admin, Student, Teacher, Parent) */}
+            <div
+              role="tablist"
+              aria-label="Select Role"
+              className="grid grid-cols-4 gap-1.5 p-1.5 rounded-2xl bg-black/45 border border-white/15 mb-5"
+            >
+              {ROLES.map((r, i) => {
+                const isActive = i === currentIdx;
                 return (
                   <button
                     key={r.role}
                     type="button"
                     role="tab"
-                    aria-selected={isSelected}
-                    onClick={() => handleSelectRole(idx)}
-                    className={`relative z-10 border-0 bg-transparent py-2 px-0 text-[11px] font-semibold tracking-wider cursor-pointer flex flex-col items-center gap-1 transition-colors duration-300 ${
-                      isSelected ? 'text-white' : 'text-[#8d97c2] hover:text-white/80'
+                    aria-selected={isActive}
+                    onClick={() => handleSelectRole(i)}
+                    className={`relative flex flex-col items-center justify-center gap-1 py-2.5 px-1 rounded-xl text-[11px] font-bold tracking-wide transition-all cursor-pointer ${
+                      isActive ? 'text-white -translate-y-0.5' : 'text-[#8d97c2] hover:text-white'
                     }`}
+                    style={
+                      isActive
+                        ? {
+                            background: `linear-gradient(135deg, ${r.a}35, ${r.b}25)`,
+                            boxShadow: `0 8px 22px -6px ${r.a}`,
+                            border: `1px solid ${r.a}80`,
+                          }
+                        : { border: '1px solid transparent' }
+                    }
                   >
                     <svg
                       viewBox="0 0 24 24"
-                      className="w-5 h-5 fill-none stroke-current stroke-[1.8] stroke-linecap-round stroke-linejoin-round transition-transform duration-300"
-                      style={{
-                        transform: isSelected ? 'scale(1.18)' : 'scale(1)',
-                      }}
+                      className="w-[18px] h-[18px] stroke-current fill-none stroke-[1.9]"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      style={
+                        isActive ? { color: r.a, filter: `drop-shadow(0 0 6px ${r.a})` } : undefined
+                      }
                       dangerouslySetInnerHTML={{ __html: r.iconPath }}
                     />
-                    <span>{r.name.toUpperCase()}</span>
+                    <span>{r.name}</span>
                   </button>
                 );
               })}
             </div>
 
-            {/* Role Header Info */}
-            <div className="mt-4">
+            {/* Role Header & Badge */}
+            <div className="text-center mb-5">
               <span
-                className="inline-block text-[10px] font-bold tracking-[.18em] transition-colors duration-500"
+                className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[1.6px] px-3 py-1 rounded-full border mb-2"
                 style={{
                   color: currentRole.a,
-                  textShadow: `0 0 12px ${currentRole.a}`,
+                  backgroundColor: 'rgba(255,255,255,0.04)',
+                  borderColor: 'rgba(255,255,255,0.14)',
                 }}
               >
-                {currentRole.tag}
+                ● {currentRole.tag}
               </span>
-
-              <h1 className="my-1 text-2xl md:text-[26px] font-extrabold tracking-tight leading-tight">
+              <h1 className="text-2xl sm:text-[28px] font-extrabold tracking-tight leading-tight text-white">
                 {currentRole.title}
                 <span
-                  className="bg-clip-text text-transparent"
                   style={{
-                    backgroundImage: `linear-gradient(90deg, ${currentRole.a}, ${currentRole.b})`,
+                    background: `linear-gradient(135deg, #fff 20%, ${currentRole.a} 65%, ${currentRole.b})`,
+                    WebkitBackgroundClip: 'text',
+                    color: 'transparent',
                   }}
                 >
                   {currentRole.titleHighlight}
                 </span>
               </h1>
+              <p className="text-xs text-[#8d97c2] mt-1 leading-relaxed">{currentRole.subtitle}</p>
+            </div>
 
-              <p className="mb-2 text-[#8d97c2] text-xs leading-relaxed">
-                {currentRole.subtitle}
-              </p>
-
-              {/* Identifier Input (Clean & Empty) */}
-              <div className="relative mt-3.5">
+            {/* Username / ID Input */}
+            <div className="mb-3.5">
+              <div className="flex justify-between text-xs font-semibold text-[#cbd3f5] mb-1.5">
+                <label htmlFor="waqar-uid">{currentRole.userLabel}</label>
+              </div>
+              <div className="relative flex items-center">
+                <svg
+                  className="absolute left-3.5 w-[18px] h-[18px] text-[#8d97c2] pointer-events-none stroke-current fill-none stroke-[1.9]"
+                  viewBox="0 0 24 24"
+                >
+                  <circle cx="12" cy="8" r="4" />
+                  <path d="M4 20c1.8-4 14.2-4 16 0" />
+                </svg>
                 <input
-                  id="portal-uid"
+                  id="waqar-uid"
                   type="text"
-                  placeholder=" "
-                  autoComplete="off"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="peer w-full h-13 px-4 pt-4 pb-1 rounded-2xl border border-white/15 bg-black/35 text-white text-base outline-none transition-all duration-300 focus:border-[var(--a)] focus:shadow-[0_0_0_4px_color-mix(in_srgb,var(--a)_22%,transparent),0_0_24px_-4px_var(--a)]"
-                  style={{ '--a': currentRole.a } as React.CSSProperties}
-                />
-                <label
-                  htmlFor="portal-uid"
-                  className="absolute left-4 top-3.5 text-sm text-[#8d97c2] pointer-events-none transition-all duration-200 peer-focus:top-1.5 peer-focus:text-[11px] peer-focus:tracking-wider peer-focus:text-[var(--a)] peer-[:not(:placeholder-shown)]:top-1.5 peer-[:not(:placeholder-shown)]:text-[11px] peer-[:not(:placeholder-shown)]:tracking-wider"
-                  style={{ '--a': currentRole.a } as React.CSSProperties}
-                >
-                  {currentRole.userLabel}
-                </label>
-              </div>
-
-              {/* Password Input (Clean & Empty) */}
-              <div className="relative mt-3">
-                <input
-                  id="portal-pw"
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder=" "
+                  placeholder={currentRole.placeholder}
                   autoComplete="off"
+                  required
+                  className="w-full h-12 pl-11 pr-4 rounded-[14px] border border-white/15 bg-[#060816]/75 text-white text-sm outline-none transition-all placeholder:text-[#7882af]/60 focus:bg-[#080b1e]/95"
+                  style={{
+                    borderColor: username ? currentRole.a : 'rgba(255,255,255,0.14)',
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Password Input */}
+            <div className="mb-3.5">
+              <div className="flex justify-between text-xs font-semibold text-[#cbd3f5] mb-1.5">
+                <label htmlFor="waqar-pwd">Password / Security PIN</label>
+              </div>
+              <div className="relative flex items-center">
+                <svg
+                  className="absolute left-3.5 w-[18px] h-[18px] text-[#8d97c2] pointer-events-none stroke-current fill-none stroke-[1.9]"
+                  viewBox="0 0 24 24"
+                >
+                  <rect x="4" y="11" width="16" height="10" rx="2" />
+                  <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+                </svg>
+                <input
+                  id="waqar-pwd"
+                  type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="peer w-full h-13 pl-4 pr-12 pt-4 pb-1 rounded-2xl border border-white/15 bg-black/35 text-white text-base outline-none transition-all duration-300 focus:border-[var(--a)] focus:shadow-[0_0_0_4px_color-mix(in_srgb,var(--a)_22%,transparent),0_0_24px_-4px_var(--a)]"
-                  style={{ '--a': currentRole.a } as React.CSSProperties}
+                  placeholder="Enter your password"
+                  autoComplete="off"
+                  required
+                  className="w-full h-12 pl-11 pr-11 rounded-[14px] border border-white/15 bg-[#060816]/75 text-white text-sm outline-none transition-all placeholder:text-[#7882af]/60 focus:bg-[#080b1e]/95"
+                  style={{
+                    borderColor: password ? currentRole.a : 'rgba(255,255,255,0.14)',
+                  }}
                 />
-                <label
-                  htmlFor="portal-pw"
-                  className="absolute left-4 top-3.5 text-sm text-[#8d97c2] pointer-events-none transition-all duration-200 peer-focus:top-1.5 peer-focus:text-[11px] peer-focus:tracking-wider peer-focus:text-[var(--a)] peer-[:not(:placeholder-shown)]:top-1.5 peer-[:not(:placeholder-shown)]:text-[11px] peer-[:not(:placeholder-shown)]:tracking-wider"
-                  style={{ '--a': currentRole.a } as React.CSSProperties}
-                >
-                  Password
-                </label>
-
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
-                  className="absolute right-2.5 top-2 w-9 h-9 rounded-xl border-0 bg-transparent text-[#8d97c2] hover:text-white cursor-pointer grid place-items-center transition-colors"
+                  aria-label="Toggle password visibility"
+                  className="absolute right-2.5 w-8 h-8 rounded-lg flex items-center justify-center text-[#8d97c2] hover:text-white hover:bg-white/10 cursor-pointer"
                 >
-                  <svg viewBox="0 0 24 24" className="w-5 h-5 fill-none stroke-current stroke-[1.8] stroke-linecap-round">
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="w-[18px] h-[18px] stroke-current fill-none stroke-[1.9]"
+                  >
                     {showPassword ? (
                       <>
-                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
-                        <line x1="1" y1="1" x2="23" y2="23" />
+                        <path d="M3 3l18 18" />
+                        <path d="M10.6 10.6a2 2 0 0 0 2.8 2.8" />
+                        <path d="M9.9 5.1A10.7 10.7 0 0 1 12 5c6.5 0 10 7 10 7a18 18 0 0 1-4 5.2" />
+                        <path d="M6.2 6.2C3.6 8 2 12 2 12a18 18 0 0 0 9.8 7c1.6 0 3.1-.4 4.4-1" />
                       </>
                     ) : (
                       <>
-                        <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z" />
+                        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" />
                         <circle cx="12" cy="12" r="3" />
                       </>
                     )}
                   </svg>
                 </button>
               </div>
+            </div>
 
-              {/* Aux Controls: Remember Me + Forgot Password */}
-              <div className="flex justify-between items-center my-3 text-xs text-[#8d97c2]">
-                <label className="flex gap-2 items-center cursor-pointer select-none">
-                  <input
-                    type="checkbox"
-                    checked={rememberMe}
-                    onChange={(e) => setRememberMe(e.target.checked)}
-                    className="accent-[var(--a)] rounded w-3.5 h-3.5 cursor-pointer"
-                    style={{ '--a': currentRole.a } as React.CSSProperties}
-                  />
-                  <span>Remember me</span>
-                </label>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setForgotUser(username);
-                    setShowForgotModal(true);
-                  }}
-                  className="bg-transparent border-none p-0 font-semibold cursor-pointer text-[var(--a)] hover:underline"
-                  style={{ '--a': currentRole.a } as React.CSSProperties}
-                >
-                  Forgot password?
-                </button>
-              </div>
-
-              {/* Submit Button */}
+            {/* Remember & Forgot Password Row */}
+            <div className="flex items-center justify-between text-xs text-[#8d97c2] my-3">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="w-4 h-4 rounded cursor-pointer"
+                  style={{ accentColor: currentRole.a }}
+                />
+                <span>Keep me signed in</span>
+              </label>
               <button
-                type="submit"
-                disabled={authLoading}
-                className="go-button-shimmer relative overflow-hidden w-full h-[52px] mt-2 rounded-2xl border-0 text-[#05060f] font-extrabold text-[14px] tracking-wider cursor-pointer transition-all duration-200 active:scale-95 disabled:cursor-wait"
-                style={{
-                  background: `linear-gradient(110deg, ${currentRole.a}, ${currentRole.b})`,
-                  boxShadow: `0 10px 40px -8px ${currentRole.a}`,
+                type="button"
+                onClick={() => {
+                  setForgotMsg('');
+                  setShowForgotModal(true);
                 }}
+                className="font-semibold hover:underline cursor-pointer"
+                style={{ color: currentRole.a }}
               >
-                {authLoading ? (
-                  <span>
-                    <span className="spinner-icon"></span>
-                    VERIFYING...
-                  </span>
-                ) : (
-                  `LOGIN AS ${currentRole.name.toUpperCase()}`
-                )}
+                Forgot password?
               </button>
             </div>
 
-            {/* Feedback / Error Message Display */}
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={authLoading}
+              className="w-full h-[50px] rounded-[14px] font-bold text-[15px] tracking-wide text-[#060812] cursor-pointer relative overflow-hidden transition-all active:scale-[0.99] disabled:opacity-60"
+              style={{
+                background: `linear-gradient(135deg, ${currentRole.a}, ${currentRole.b})`,
+                boxShadow: `0 12px 30px -8px ${currentRole.a}`,
+              }}
+            >
+              {authLoading ? 'Verifying Credentials...' : `Login as ${currentRole.name} →`}
+            </button>
+
+            {/* Error or Status Message */}
             {localMsg || authError ? (
               <div
                 className="min-h-[20px] mt-2.5 text-center text-xs font-semibold"
@@ -707,14 +647,14 @@ export const Waqar3DLoginPortal: React.FC<Waqar3DLoginPortalProps> = ({
               </div>
             ) : null}
 
-            {/* Clean Security Chips */}
+            {/* Security Chips */}
             <div className="flex justify-center gap-3.5 mt-3 text-[11px] text-[#8d97c2] tracking-wider font-semibold">
               <span className="flex items-center gap-1.5">
                 <span
                   className="inline-block w-1.5 h-1.5 rounded-full"
                   style={{ background: currentRole.a, boxShadow: `0 0 8px ${currentRole.a}` }}
                 />
-                AES-256
+                AES-256 SQLCipher
               </span>
               <span className="flex items-center gap-1.5">
                 <span
@@ -728,7 +668,7 @@ export const Waqar3DLoginPortal: React.FC<Waqar3DLoginPortalProps> = ({
                   className="inline-block w-1.5 h-1.5 rounded-full"
                   style={{ background: currentRole.a, boxShadow: `0 0 8px ${currentRole.a}` }}
                 />
-                Verified
+                Play Integrity
               </span>
             </div>
           </form>
@@ -740,7 +680,7 @@ export const Waqar3DLoginPortal: React.FC<Waqar3DLoginPortalProps> = ({
         WAQAR COMPUTER INSTITUTE • SECURE CLOUD GATEWAY
       </footer>
 
-      {/* Forgot Password Reset Modal */}
+      {/* Forgot Password Reset Modal via Firebase Auth */}
       {showForgotModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
           <div className="w-full max-w-md p-6 rounded-3xl bg-[#0e122a] border border-white/15 text-white shadow-2xl relative">
@@ -753,42 +693,18 @@ export const Waqar3DLoginPortal: React.FC<Waqar3DLoginPortalProps> = ({
             </button>
             <h3 className="text-xl font-bold mb-1">Reset Password</h3>
             <p className="text-xs text-slate-400 mb-4">
-              Enter your Username/ID and Date of Birth to set a new password.
+              Enter your registered Username or Institute Email to receive a Firebase Authentication password reset link.
             </p>
 
             <form onSubmit={handleResetSubmit} className="space-y-3">
               <div>
-                <label className="text-xs text-slate-300 block mb-1">Username / ID</label>
+                <label className="text-xs text-slate-300 block mb-1">Username / Email</label>
                 <input
                   type="text"
                   required
-                  placeholder="Enter your registered ID"
+                  placeholder="Enter your registered ID or email"
                   value={forgotUser}
                   onChange={(e) => setForgotUser(e.target.value)}
-                  className="w-full h-11 px-3 rounded-xl bg-black/40 border border-white/20 text-white text-sm outline-none focus:border-indigo-400"
-                />
-              </div>
-
-              <div>
-                <label className="text-xs text-slate-300 block mb-1">Date of Birth (YYYY-MM-DD)</label>
-                <input
-                  type="date"
-                  required
-                  value={forgotDob}
-                  onChange={(e) => setForgotDob(e.target.value)}
-                  className="w-full h-11 px-3 rounded-xl bg-black/40 border border-white/20 text-white text-sm outline-none focus:border-indigo-400"
-                />
-              </div>
-
-              <div>
-                <label className="text-xs text-slate-300 block mb-1">New Password</label>
-                <input
-                  type="password"
-                  required
-                  minLength={4}
-                  placeholder="Enter new password"
-                  value={forgotNewPass}
-                  onChange={(e) => setForgotNewPass(e.target.value)}
                   className="w-full h-11 px-3 rounded-xl bg-black/40 border border-white/20 text-white text-sm outline-none focus:border-indigo-400"
                 />
               </div>
@@ -801,7 +717,7 @@ export const Waqar3DLoginPortal: React.FC<Waqar3DLoginPortalProps> = ({
                 type="submit"
                 className="w-full h-12 mt-2 rounded-xl font-bold text-sm bg-gradient-to-r from-indigo-500 to-pink-500 text-white cursor-pointer shadow-lg hover:opacity-90 transition-opacity"
               >
-                Confirm Password Reset
+                Send Password Reset Email
               </button>
             </form>
           </div>

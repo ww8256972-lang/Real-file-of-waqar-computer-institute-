@@ -53,10 +53,10 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import coil.compose.AsyncImage
-import com.edusync.academy.security.DualCanaryCryptoVault
 import com.waqarinstitute.erp.BuildConfig
 import com.waqarinstitute.erp.data.WaqarFirebaseRepository
 import com.waqarinstitute.erp.qr.AttendanceQrGenerator
+import com.waqarinstitute.erp.security.DualCanaryCryptoVault
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
@@ -1106,7 +1106,11 @@ fun NativeDynamicQrGeneratorCard(
             Button(
                 onClick = {
                     scope.launch {
-                        qrBitmap = AttendanceQrGenerator.generateQrBitmap(batchCode, teacherId, 5)
+                        qrBitmap = AttendanceQrGenerator.generateQrBitmap(
+                            batchCode = batchCode,
+                            teacherId = teacherId,
+                            validityMinutes = 5
+                        )
                         remainingSeconds = 300
                     }
                 },
@@ -1123,11 +1127,13 @@ fun NativeDynamicQrGeneratorCard(
 
 @Composable
 fun NativeCircularProgressRing(
-    percentage: Double,
+    percentage: Number,
     label: String,
     size: Dp = 94.dp,
-    color: Color = Color(0xFF00B4D8)
+    color: Color = Color(0xFF00B4D8),
+    activeColor: Color = color
 ) {
+    val pctDouble = percentage.toDouble()
     Box(contentAlignment = Alignment.Center, modifier = Modifier.size(size)) {
         Canvas(modifier = Modifier.fillMaxSize().padding(6.dp)) {
             drawArc(
@@ -1138,16 +1144,16 @@ fun NativeCircularProgressRing(
                 style = Stroke(width = 18f, cap = StrokeCap.Round)
             )
             drawArc(
-                color = color,
+                color = activeColor,
                 startAngle = -90f,
-                sweepAngle = (percentage.coerceIn(0.0, 100.0).toFloat() / 100f) * 360f,
+                sweepAngle = (pctDouble.coerceIn(0.0, 100.0).toFloat() / 100f) * 360f,
                 useCenter = false,
                 style = Stroke(width = 18f, cap = StrokeCap.Round)
             )
         }
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
-                text = "${percentage.toInt()}%",
+                text = "${pctDouble.toInt()}%",
                 fontWeight = FontWeight.ExtraBold,
                 fontSize = 18.sp,
                 color = Color.White

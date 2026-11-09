@@ -25,6 +25,8 @@ object NativeLibrary {
     var loadError: String? = null
         private set
 
+    fun isAvailable(): Boolean = if (loadAttempted.get()) isLoaded else ensureLoaded()
+
     @Synchronized
     fun ensureLoaded(): Boolean {
         if (loadAttempted.get()) {

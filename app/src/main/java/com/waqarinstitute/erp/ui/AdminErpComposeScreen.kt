@@ -1095,25 +1095,23 @@ fun AdminErpComposeScreen(
                                 Button(
                                     onClick = {
                                         scope.launch {
-                                            if (adminNewPass.isNotBlank()) {
-                                                repository.adminResetManagedUserPassword(
-                                                    targetUidOrUsername = userProfile.uid.ifBlank { adminNewUser.trim() },
-                                                    newPassword = adminNewPass.trim()
-                                                )
-                                            }
-                                            repository.saveCloudCredentialMetadata(
-                                                userProfile.copy(
-                                                    username = adminNewUser.trim(),
-                                                    role = "admin"
-                                                )
+                                            val result = repository.updateAdminCredentialsInCloudSync(
+                                                currentProfile = userProfile,
+                                                newUsernameInput = adminNewUser.trim().ifBlank { userProfile.username },
+                                                newPasswordInput = adminNewPass.trim()
                                             )
-                                            statusBanner = "Admin profile & Firebase Auth credentials updated!"
+                                            statusBanner = if (result.isSuccess) {
+                                                val updated = result.getOrNull()
+                                                "Cloud Sync Updated! New Admin Username '${updated?.username}' & Password saved to Firebase."
+                                            } else {
+                                                "Update error: ${result.exceptionOrNull()?.localizedMessage ?: "Please enter a valid password"}"
+                                            }
                                         }
                                     },
                                     modifier = Modifier.fillMaxWidth(),
                                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0077B6))
                                 ) {
-                                    Text("Update Admin Login Credentials", fontWeight = FontWeight.Bold)
+                                    Text("Update Admin Login Credentials in Cloud Sync", fontWeight = FontWeight.Bold)
                                 }
 
                                 Spacer(modifier = Modifier.height(14.dp))

@@ -181,3 +181,13 @@ class PlayIntegritySecurityVault(private val context: Context) {
         }
     }
 }
+
+/**
+ * Result data wrapper for Play Integrity attestation.
+ */
+data class PlayIntegrityAttestationResult(
+    val token: String,
+    val clientNonce: String,
+    val isGmsAvailable: Boolean,
+    val fallbackHardwareAttestation: String? = null
+)
